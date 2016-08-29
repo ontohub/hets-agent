@@ -1,2 +1,2 @@
-# ontohub-hets-wrapper
+# hets-rabbitmq-wrapper
 RabbitMQ wrapper for Hets
