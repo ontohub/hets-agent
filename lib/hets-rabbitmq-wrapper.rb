@@ -12,19 +12,19 @@ module HetsRabbitMQWrapper
   end
 
   def self.instance_version
-    #get version from HetsInstance
+    # get version from HetsInstance
   end
 
   def self.min_parsing_version(connection)
     channel = connection.create_channel
     channel.exchange_declare('ex_min_parsing_version', 'x-recent-history',
-                             {'x-recent-history-length' => 1})
+                             'x-recent-history-length' => 1)
     q_min_parsing_version = channel.queue('q_min_parsing_version',
                                           durable: true, auto_delete: false)
     q_min_parsing_version.bind('ex_min_parsing_version')
     q_min_parsing_version.
       subscribe(block: false,
-                timeout: 0) do |delivery_info, properties, version|
+                timeout: 0) do |_delivery_info, _properties, version|
       subscribe(version, connection)
     end
   end
@@ -32,16 +32,15 @@ module HetsRabbitMQWrapper
   def self.subscribe(version, connection)
     channel = connection.create_channel
     channel.prefetch(1)
-    queues = Hash.new
-    queues["#{version}"] = channel.queue("parsing-version-#{version}",
+    queues = {}
+    queues[version.to_s] = channel.queue("parsing-version-#{version}",
                                          auto_delete: true)
-    puts queues["#{version}"]
     if version.to_i <= instance_version.to_i
-      queues["#{version}"].
+      queues[version.to_s].
         subscribe(block: false, manual_ack: true,
-                  timeout: 0) do |delivery_info, properties, body|
+                  timeout: 0) do |delivery_info, _properties, _body|
         channel.ack(delivery_info.delivery_tag)
-        #push body to hets
+        # push body to hets
       end
     end
   end
