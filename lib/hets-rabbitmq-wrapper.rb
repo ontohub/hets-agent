@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'hets-rabbitmq-wrapper/version'
 require 'bunny'
 
@@ -6,13 +8,16 @@ module HetsRabbitMQWrapper
     connection = Bunny.new
     connection.start
     channel = connection.create_channel
-    #worker will only accept one message at time
+    # worker will only accept one message at time
     channel.prefetch(1)
-    request_queue = channel.queue('hets-request', durable: true, auto_delete: false)
+    request_queue =
+      channel.queue('hets-request', durable: true, auto_delete: false)
     result_queue = channel.queue('hets-result')
 
-    request_queue.subscribe(manual_ack: true, block: true, timeout: 0) do |delivery_info, properties, body|
-      #todo: push body to hets
+    request_queue.subscribe(manual_ack: true,
+                            block: true,
+                            timeout: 0) do |delivery_info, _properties, _body|
+      # TODO: push body to hets
       channel.ack(delivery_info.delivery_tag)
     end
   end
