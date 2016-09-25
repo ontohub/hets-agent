@@ -8,8 +8,8 @@ require 'hets-rabbitmq-wrapper/error'
 module HetsRabbitMQWrapper
   # Delivers queues for messages and decision which queues should be subscribed
   class Subscriber
-    def initialize
-      @connection = Bunny.new
+    def initialize(connection = Bunny.new)
+      @connection = connection
     end
 
     def call
