@@ -22,11 +22,7 @@ module HetsRabbitMQWrapper
     # get version from HetsInstance and parse it
     def instance_version
       return @version if @version
-      version = call_hets_version
-      @version = version.match('(\d+)\z')[0].to_i
-    rescue NoMethodError
-      raise HetsRabbitMQWrapper::HetsVersionParsingError,
-      'Could not parse Hets version'
+      parse_version(call_hets_version)
     rescue Errno::ECONNREFUSED
       raise HetsRabbitMQWrapper::HetsUnreachableError, 'Hets unreachable'
     end
@@ -39,6 +35,14 @@ module HetsRabbitMQWrapper
         execute(method: :get,
                 url: 'http://localhost:8000/version',
                 timeout: 3).to_s
+    end
+
+    # parse hets version
+    def parse_version(version)
+      @version = version.match('(\d+)\z')[0].to_i
+    rescue NoMethodError
+      raise HetsRabbitMQWrapper::HetsVersionParsingError,
+      'Could not parse Hets version'
     end
 
     # Binds queue to exchange and subscribes to mininmal parsing version queue
