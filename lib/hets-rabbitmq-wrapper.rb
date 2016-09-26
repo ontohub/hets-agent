@@ -59,8 +59,8 @@ module HetsRabbitMQWrapper
     # Creates an exchange and a queue for minimal parsing version
     def min_parsing_version_queue
       channel = @connection.create_channel
-      channel.exchange_declare('ex_min_parsing_version', 'x-recent-history',
-                               'x-recent-history-length' => 1)
+      channel.exchange('ex_min_parsing_version', {type: 'x-recent-history',
+                       arguments: {'x-recent-history-length' => 1}})
       channel.queue('q_min_parsing_version', durable: true, auto_delete: false)
     end
 
