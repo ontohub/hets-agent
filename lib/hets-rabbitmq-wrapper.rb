@@ -20,9 +20,9 @@ module HetsRabbitMQWrapper
     end
 
     # get version from HetsInstance and parse it
-    def instance_version
-      return @version if @version
-      parse_version(call_hets_version)
+    def hets_version
+      return @hets_version if @hets_version
+      parse_hets_version(call_hets_version)
     rescue Errno::ECONNREFUSED
       raise HetsRabbitMQWrapper::HetsUnreachableError, 'Hets unreachable'
     end
@@ -38,8 +38,8 @@ module HetsRabbitMQWrapper
     end
 
     # parse hets version
-    def parse_version(version)
-      @version = version.match('(\d+)\z')[0].to_i
+    def parse_hets_version(version)
+      @hets_version = version.match(/(\d+)\z/)[0].to_i
     rescue NoMethodError
       raise HetsRabbitMQWrapper::HetsVersionParsingError,
       'Could not parse Hets version'
@@ -51,8 +51,8 @@ module HetsRabbitMQWrapper
       q_min_parsing_version.bind('ex_min_parsing_version')
       q_min_parsing_version.
         subscribe(block: true,
-                  timeout: 0) do |_delivery_info, _properties, version|
-        subscribe_worker_queue(version)
+                  timeout: 0) do |_delivery_info, _properties, min_version|
+        subscribe_worker_queue(min_version)
       end
     end
 
@@ -65,10 +65,10 @@ module HetsRabbitMQWrapper
     end
 
     # Subscribes to worker queue if min version is <= own version
-    def subscribe_worker_queue(version)
-      queues = create_worker_queue(version)
-      if version.to_i <= @version
-        queues[version.to_s].
+    def subscribe_worker_queue(min_version)
+      queues = create_worker_queue(min_version)
+      if min_version.to_i <= @hets_version
+        queues[min_version.to_s].
           subscribe(block: false, manual_ack: true,
                     timeout: 0) do |delivery_info, _properties, _body|
           channel.ack(delivery_info.delivery_tag)
@@ -78,10 +78,10 @@ module HetsRabbitMQWrapper
     end
 
     # Creates a worker queue depending on the min parsing version
-    def create_worker_queue(version)
+    def create_worker_queue(min_version)
       channel = @connection.create_channel
       channel.prefetch(1)
-      {version.to_s => channel.queue("parsing-version-#{version}",
+      {min_version.to_s => channel.queue("parsing-version-#{min_version}",
                                      auto_delete: true)}
     end
   end
