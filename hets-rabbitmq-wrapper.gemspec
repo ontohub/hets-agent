@@ -36,6 +36,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry-coolline', '~> 0.2.5'
   spec.add_development_dependency 'awesome_print', '~> 1.7.0'
 
+  # CI services
+  spec.add_development_dependency 'coveralls', '~> 0.8.15'
+
   spec.add_dependency 'bunny', '~> 2.5.1'
   spec.add_dependency 'rest-client', '~> 2.0.0'
 end
