@@ -26,18 +26,19 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.12'
-  spec.add_development_dependency 'rake', '~> 11.3.0'
-  spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'pry', '~> 0.10.4'
-  spec.add_development_dependency 'pry-rescue', '~> 1.4.4'
-  spec.add_development_dependency 'pry-stack_explorer', '~> 0.4.9.2'
-  spec.add_development_dependency 'pry-byebug', '~> 3.4.0'
-  spec.add_development_dependency 'awesome_print', '~> 1.7.0'
+  spec.add_development_dependency 'bundler', '~> 1.11'
+  spec.add_development_dependency 'rake', '~> 12.0.0'
+  spec.add_development_dependency 'rspec', '~> 3.5.0'
 
   # CI services
-  spec.add_development_dependency 'coveralls', '~> 0.8.15'
+  spec.add_development_dependency 'coveralls', '~> 0.8.17'
 
+  # We want to have these in the production environment as well in case we need
+  # to debug the application:
+  spec.add_dependency 'pry', '~> 0.10.4'
+  spec.add_dependency 'awesome_print', '~> 1.7.0'
+
+  # Production dependencies
   spec.add_dependency 'bunny', '~> 2.5.1'
   spec.add_dependency 'rest-client', '~> 2.0.0'
 end
