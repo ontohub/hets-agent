@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
-unless defined?(Coveralls)
-  require 'simplecov'
-  require 'coveralls'
-  SimpleCov.formatters = [
-    SimpleCov::Formatter::HTMLFormatter,
-    Coveralls::SimpleCov::Formatter,
-  ]
-  SimpleCov.start
+if RUBY_ENGINE == 'ruby' # not 'rbx'
+  unless defined?(Coveralls)
+    require 'simplecov'
+    require 'coveralls'
+    SimpleCov.formatters = [
+      SimpleCov::Formatter::HTMLFormatter,
+      Coveralls::SimpleCov::Formatter,
+    ]
+    SimpleCov.start
+  end
 end
