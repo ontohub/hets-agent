@@ -3,7 +3,7 @@ PATH
   specs:
     hets-rabbitmq-wrapper (0.1.0)
       awesome_print (~> 1.7.0)
-      bunny (~> 2.5.1)
+      bunny (~> 2.6.2)
       pry (~> 0.10.4)
       rest-client (~> 2.0.0)
 
@@ -14,7 +14,7 @@ GEM
     awesome_print (1.7.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
-    bunny (2.5.1)
+    bunny (2.6.2)
       amq-protocol (>= 2.0.1)
     byebug (9.0.6)
     coderay (1.1.1)
@@ -32,7 +32,7 @@ GEM
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     interception (0.5)
-    json (2.0.2)
+    json (2.0.3)
     method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
