@@ -39,6 +39,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'awesome_print', '~> 1.7.0'
 
   # Production dependencies
-  spec.add_dependency 'bunny', '~> 2.5.1'
+  spec.add_dependency 'bunny', '~> 2.6.2'
   spec.add_dependency 'rest-client', '~> 2.0.0'
 end
