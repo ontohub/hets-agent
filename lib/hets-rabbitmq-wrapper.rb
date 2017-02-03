@@ -61,21 +61,21 @@ module HetsRabbitMQWrapper
     # Creates an exchange and a queue for minimal parsing version
     def min_parsing_version_queue
       channel = @connection.create_channel
-      channel.exchange('ex_min_parsing_version', {type: 'x-recent-history',
-                       arguments: {'x-recent-history-length' => 1}})
+      channel.exchange('ex_min_parsing_version',
+                       type: 'x-recent-history',
+                       arguments: {'x-recent-history-length' => 1})
       channel.queue('q_min_parsing_version', durable: true, auto_delete: false)
     end
 
     # Subscribes to worker queue if min version is <= own version
     def subscribe_worker_queue(min_version)
       queues = create_worker_queue(min_version)
-      if parse_hets_version(min_version) <= hets_version
-        queues.
-          subscribe(block: false, manual_ack: true,
-                    timeout: 0) do |delivery_info, _properties, _body|
-          queues.channel.acknowledge(delivery_info.delivery_tag)
-          # TODO: push body to hets
-        end
+      return unless parse_hets_version(min_version) <= hets_version
+      queues.
+        subscribe(block: false, manual_ack: true,
+                  timeout: 0) do |delivery_info, _properties, _body|
+        queues.channel.acknowledge(delivery_info.delivery_tag)
+        # TODO: push body to hets
       end
     end
 

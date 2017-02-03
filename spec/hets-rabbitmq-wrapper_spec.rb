@@ -11,7 +11,6 @@ describe HetsRabbitMQWrapper do
 end
 
 describe HetsRabbitMQWrapper::Subscriber do
-
   let(:subscriber) { HetsRabbitMQWrapper::Subscriber.new(BunnyMock.new) }
   let(:queue) { subscriber.call }
   let(:session) { queue.channel.connection }

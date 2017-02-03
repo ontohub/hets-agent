@@ -2,15 +2,14 @@
 require 'bunny-mock'
 
 module BunnyMock
-
   class Exchange
     # Monkeypatch, XRecentHistory be found by the ex declare "x-recent-history"
     def self.declare(channel, name = '', opts = {})
       # get requested type
       type = opts.fetch :type, :direct
-       # get needed class type
+      # get needed class type
       klazz = BunnyMock::Exchanges.const_get(type.to_s.split('-').
-        collect(&:capitalize).join)
+        map(&:capitalize).join)
       # create exchange of desired type
       klazz.new channel, name, type, opts
     end

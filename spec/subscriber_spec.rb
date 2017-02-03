@@ -14,7 +14,7 @@ describe HetsRabbitMQWrapper::Subscriber do
     end
 
     it 'parses the version correctly' do
-      expect(subject.hets_version).to eq(1471209385)
+      expect(subject.hets_version).to eq(1_471_209_385)
     end
 
     context 'unreachable hets' do
