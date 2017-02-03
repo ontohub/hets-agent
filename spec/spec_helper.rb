@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
+require_relative 'support/simplecov'
+
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'hets-rabbitmq-wrapper'
-require_relative 'support/simplecov'
 require 'bunny-mock'
 
 RSpec.configure do |config|

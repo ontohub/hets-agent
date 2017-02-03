@@ -4,6 +4,7 @@ require 'hets-rabbitmq-wrapper/version'
 require 'bunny'
 require 'rest-client'
 require 'hets-rabbitmq-wrapper/error'
+require 'pry'
 
 module HetsRabbitMQWrapper
   # Delivers queues for messages and decision which queues should be subscribed
@@ -21,25 +22,26 @@ module HetsRabbitMQWrapper
 
     # get version from HetsInstance and parse it
     def hets_version
-      return @hets_version if @hets_version
-      parse_hets_version(call_hets_version)
+      @hets_version ||= parse_hets_version(call_hets_version)
     rescue Errno::ECONNREFUSED
       raise HetsRabbitMQWrapper::HetsUnreachableError, 'Hets unreachable'
     end
 
     private
 
-    # call hets version
+    # call hets version, stubbed out in the tests
+    # :nocov:
     def call_hets_version
       RestClient::Request.
         execute(method: :get,
                 url: 'http://localhost:8000/version',
                 timeout: 3).to_s
     end
+    # :nocov:
 
     # parse hets version
     def parse_hets_version(version)
-      @hets_version = version.match(/(\d+)\z/)[0].to_i
+      version.match(/(\d+)\z/)[0].to_i
     rescue NoMethodError
       raise HetsRabbitMQWrapper::HetsVersionParsingError,
       'Could not parse Hets version'
@@ -67,11 +69,11 @@ module HetsRabbitMQWrapper
     # Subscribes to worker queue if min version is <= own version
     def subscribe_worker_queue(min_version)
       queues = create_worker_queue(min_version)
-      if min_version.to_i <= @hets_version
-        queues[min_version.to_s].
+      if parse_hets_version(min_version) <= hets_version
+        queues.
           subscribe(block: false, manual_ack: true,
                     timeout: 0) do |delivery_info, _properties, _body|
-          channel.ack(delivery_info.delivery_tag)
+          queues.channel.acknowledge(delivery_info.delivery_tag)
           # TODO: push body to hets
         end
       end
@@ -81,8 +83,8 @@ module HetsRabbitMQWrapper
     def create_worker_queue(min_version)
       channel = @connection.create_channel
       channel.prefetch(1)
-      {min_version.to_s => channel.queue("parsing-version-#{min_version}",
-                                     auto_delete: true)}
+      min_version = parse_hets_version(min_version)
+      channel.queue("parsing-version-#{min_version}", auto_delete: true)
     end
   end
 end
