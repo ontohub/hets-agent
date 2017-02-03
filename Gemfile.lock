@@ -20,6 +20,8 @@ GEM
       bunny (>= 1.7)
     byebug (9.0.6)
     coderay (1.1.1)
+    coolline (0.5.0)
+      unicode_utils (~> 1.4)
     coveralls (0.8.17)
       json (>= 1.8, < 3)
       simplecov (~> 0.12.0)
@@ -47,6 +49,8 @@ GEM
     pry-byebug (3.4.2)
       byebug (~> 9.0)
       pry (~> 0.10)
+    pry-coolline (0.2.5)
+      coolline (~> 0.5)
     pry-rescue (1.4.4)
       interception (>= 0.5)
       pry
@@ -84,6 +88,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
+    unicode_utils (1.4.0)
 
 PLATFORMS
   ruby
@@ -94,7 +99,9 @@ DEPENDENCIES
   bunny-mock (~> 1.5.0)
   coveralls (~> 0.8.17)
   hets-rabbitmq-wrapper!
+  pry (~> 0.10.4)
   pry-byebug (~> 3.4.2)
+  pry-coolline (~> 0.2.5)
   pry-rescue (~> 1.4.4)
   pry-stack_explorer (~> 0.4.9.2)
   rake (~> 12.0.0)
