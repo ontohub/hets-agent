@@ -4,7 +4,7 @@ require 'bunny-mock'
 module BunnyMock
   class Exchange
     # Monkeypatch, XRecentHistory be found by the ex declare "x-recent-history"
-    def self.declare(channel, name = '', opts = {})
+    def self.declare(channel, name = '', **opts)
       # get requested type
       type = opts.fetch :type, :direct
       # get needed class type
