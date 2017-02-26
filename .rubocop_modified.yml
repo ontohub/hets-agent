@@ -1,0 +1,20 @@
+Metrics/BlockLength:
+  Exclude:
+    - 'ontohub-models.gemspec'
+    - 'spec/**/*'
+    - 'db/migrate/*'
+
+Style/AlignParameters:
+  Enabled: false
+
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
