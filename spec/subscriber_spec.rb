@@ -7,14 +7,16 @@ describe HetsRabbitMQWrapper::Subscriber do
   subject { HetsRabbitMQWrapper::Subscriber.new }
 
   context 'hets_version' do
+    let(:version_timestamp) { 1_471_209_385 }
+    let(:version) { "v0.99, #{version_timestamp}" }
     before do
       allow(Bunny).to receive(:new).and_return(bunny_spy)
       allow(subject).
-        to receive(:call_hets_version).and_return('v0.99, 1471209385')
+        to receive(:call_hets_version).and_return(version)
     end
 
     it 'parses the version correctly' do
-      expect(subject.hets_version).to eq(1471209385)
+      expect(subject.hets_version).to eq(version_timestamp)
     end
 
     context 'unreachable hets' do

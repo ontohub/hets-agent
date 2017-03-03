@@ -6,3 +6,7 @@
 
 # hets-rabbitmq-wrapper
 RabbitMQ wrapper for Hets
+
+# Dependencies
+You need to install the following packages
+* RabbitMQ Recent History Exchange: You can enable it with `rabbitmq-plugins enable rabbitmq_recent_history_exchange`
