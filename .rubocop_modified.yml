@@ -1,6 +1,6 @@
 Metrics/BlockLength:
   Exclude:
-    - 'ontohub-models.gemspec'
+    - 'hets-rabbitmq-wrapper.gemspec'
     - 'spec/**/*'
     - 'db/migrate/*'
 
