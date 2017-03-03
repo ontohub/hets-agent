@@ -8,7 +8,7 @@ require 'hets-rabbitmq-wrapper'
 require 'bunny-mock'
 
 RSpec.configure do |config|
-  config.before(:each) do
+  config.before(:suite) do
     HetsRabbitMQWrapper::Subscriber.new(BunnyMock.new)
   end
 end

@@ -22,13 +22,15 @@ describe HetsRabbitMQWrapper::Subscriber do
   end
 
   context 'worker queue' do
+    let(:version_timestamp) { 1_471_209_385 }
+    let(:version) { "v0.99, #{version_timestamp}" }
     before do
       allow(subscriber).
-        to receive(:call_hets_version).and_return('v0.99, 1471209385')
-      queue.publish('v0.99, 1471209385')
+        to receive(:call_hets_version).and_return(version)
+      queue.publish(version)
     end
 
-    it 'subscribe to' do
+    it 'subscribes successfully' do
       expect(session.queue_exists?('parsing-version-1471209385')).to be_truthy
     end
 
