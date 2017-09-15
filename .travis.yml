@@ -5,7 +5,6 @@ language: ruby
 
 rvm:
   - 2.4.1
-  - rbx-3.77
 
 notifications:
   email: false

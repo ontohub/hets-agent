@@ -30,7 +30,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 12.0.0'
   spec.add_development_dependency 'rspec', '~> 3.5.0'
   spec.add_development_dependency 'pry', '~> 0.10.4'
-  spec.add_development_dependency 'pry-byebug', '~> 3.4.0'
+  spec.add_development_dependency 'pry-byebug', '~> 3.5.0'
+  spec.add_development_dependency 'pry-rescue', '~> 1.4.5'
+  spec.add_development_dependency 'pry-stack_explorer', '~> 0.4.9.2'
   spec.add_development_dependency 'awesome_print', '~> 1.7.0'
   spec.add_development_dependency 'bunny-mock', '~> 1.5.0'
 
