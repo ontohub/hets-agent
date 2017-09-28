@@ -5,14 +5,14 @@ require 'spec_helper'
 require 'support/bunnymock_recent_history_exchange'
 require 'rest-client'
 
-describe HetsRabbitMQWrapper do
+describe HetsAgent do
   it 'has a version number' do
-    expect(HetsRabbitMQWrapper::VERSION).not_to be nil
+    expect(HetsAgent::VERSION).not_to be nil
   end
 end
 
-describe HetsRabbitMQWrapper::Subscriber do
-  let(:subscriber) { HetsRabbitMQWrapper::Subscriber.new(BunnyMock.new) }
+describe HetsAgent::Subscriber do
+  let(:subscriber) { HetsAgent::Subscriber.new(BunnyMock.new) }
   let(:queue) { subscriber.call }
   let(:session) { queue.channel.connection }
 

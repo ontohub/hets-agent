@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 
-describe HetsRabbitMQWrapper::Subscriber do
+describe HetsAgent::Subscriber do
   let(:bunny_spy) { :bunny_spy }
-  subject { HetsRabbitMQWrapper::Subscriber.new }
+  subject { HetsAgent::Subscriber.new }
 
   context 'hets_version' do
     let(:version_timestamp) { 1_471_209_385 }
@@ -27,7 +27,7 @@ describe HetsRabbitMQWrapper::Subscriber do
 
       it 'raises the correct error on unreachable hets' do
         expect { subject.hets_version }.
-          to raise_error(HetsRabbitMQWrapper::HetsUnreachableError,
+          to raise_error(HetsAgent::HetsUnreachableError,
                          'Hets unreachable')
       end
     end
@@ -40,7 +40,7 @@ describe HetsRabbitMQWrapper::Subscriber do
 
       it 'raises the correct error on unparseable version' do
         expect { subject.hets_version }.
-          to raise_error(HetsRabbitMQWrapper::HetsVersionParsingError,
+          to raise_error(HetsAgent::HetsVersionParsingError,
                          'Could not parse Hets version')
       end
     end

@@ -4,11 +4,11 @@ require_relative 'support/simplecov'
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
-require 'hets-rabbitmq-wrapper'
+require 'hets-agent'
 require 'bunny-mock'
 
 RSpec.configure do |config|
   config.before(:suite) do
-    HetsRabbitMQWrapper::Subscriber.new(BunnyMock.new)
+    HetsAgent::Subscriber.new(BunnyMock.new)
   end
 end

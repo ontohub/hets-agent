@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-unless defined?(Coveralls)
+unless defined?(SimpleCov)
   require 'simplecov'
-  require 'coveralls'
-  SimpleCov.formatters = [
-    SimpleCov::Formatter::HTMLFormatter,
-    Coveralls::SimpleCov::Formatter,
-  ]
   SimpleCov.start
+  require 'codecov'
+  formatters = [SimpleCov::Formatter::HTMLFormatter]
+  formatters << SimpleCov::Formatter::Codecov if ENV['CI']
+  SimpleCov.formatters = formatters
 end

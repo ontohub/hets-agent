@@ -3,17 +3,17 @@
 
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'hets-rabbitmq-wrapper/version'
+require 'hets-agent/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'hets-rabbitmq-wrapper'
-  spec.version       = HetsRabbitMQWrapper::VERSION
+  spec.name          = 'hets-agent'
+  spec.version       = HetsAgent::VERSION
   spec.authors       = ['Ontohub Core Developers']
   spec.email         = ['ontohub-dev-l@ovgu.de']
 
-  spec.summary       = 'RabbitMQ wrapper for Hets'
-  spec.description   = 'RabbitMQ wrapper for Hets'
-  spec.homepage      = 'https://github.com/ontohub/hets-rabbitmq-wrapper'
+  spec.summary       = 'An agent wrapping Hets'
+  spec.description   = 'An agent wrapping Hets'
+  spec.homepage      = 'https://github.com/ontohub/hets-agent'
 
   # Prevent pushing this gem to RubyGems.org.
   unless spec.respond_to?(:metadata)

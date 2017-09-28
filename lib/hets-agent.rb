@@ -3,12 +3,12 @@
 
 require 'bunny'
 require 'rest-client'
-require 'hets-rabbitmq-wrapper/version'
-require 'hets-rabbitmq-wrapper/application'
-require 'hets-rabbitmq-wrapper/hets'
-require 'hets-rabbitmq-wrapper/error'
+require 'hets-agent/version'
+require 'hets-agent/application'
+require 'hets-agent/hets'
+require 'hets-agent/error'
 
-module HetsRabbitMQWrapper
+module HetsAgent
   # Delivers queues for messages and decision which queues should be subscribed
   class Subscriber
     def initialize(connection = Bunny.new)
@@ -26,7 +26,7 @@ module HetsRabbitMQWrapper
     def hets_version
       @hets_version ||= parse_hets_version(call_hets_version)
     rescue Errno::ECONNREFUSED
-      raise HetsRabbitMQWrapper::HetsUnreachableError, 'Hets unreachable'
+      raise HetsAgent::HetsUnreachableError, 'Hets unreachable'
     end
 
     private
@@ -45,7 +45,7 @@ module HetsRabbitMQWrapper
     def parse_hets_version(version)
       version.match(/(\d+)\z/)[0].to_i
     rescue NoMethodError
-      raise HetsRabbitMQWrapper::HetsVersionParsingError,
+      raise HetsAgent::HetsVersionParsingError,
       'Could not parse Hets version'
     end
 

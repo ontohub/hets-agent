@@ -2,5 +2,5 @@
 
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in hets-rabbitmq-wrapper.gemspec
+# Specify your gem's dependencies in hets-agent.gemspec
 gemspec

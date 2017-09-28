@@ -3,7 +3,7 @@
 require 'config'
 require 'pathname'
 
-module HetsRabbitMQWrapper
+module HetsAgent
   # The Application class encapsulates some basic properties.
   class Application
     ROOT = Pathname.new(File.expand_path('../../../', __FILE__)).freeze

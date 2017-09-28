@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module HetsRabbitMQWrapper
+module HetsAgent
   class Error < ::StandardError; end
   class HetsError < Error; end
 

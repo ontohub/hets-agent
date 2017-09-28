@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module HetsRabbitMQWrapper
+module HetsAgent
   module Hets
     # Provides an interface to call Hets
     class Caller
@@ -9,8 +9,8 @@ module HetsRabbitMQWrapper
       def initialize
         @hets_path = Settings.hets.path.to_s
         @database_yml =
-          HetsRabbitMQWrapper::Application.root.join('config/database.yml')
-        @env = HetsRabbitMQWrapper::Application.env
+          HetsAgent::Application.root.join('config/database.yml')
+        @env = HetsAgent::Application.env
       end
 
       # Override this in the subclass

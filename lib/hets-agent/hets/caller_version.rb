@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'hets-rabbitmq-wrapper/hets/caller'
+require 'hets-agent/hets/caller'
 
-module HetsRabbitMQWrapper
+module HetsAgent
   module Hets
     # Provides an interface to call Hets and ask for the version
     class CallerVersion < Caller
