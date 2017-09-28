@@ -5,7 +5,7 @@ require 'hets-agent/hets/caller'
 module HetsAgent
   module Hets
     # Provides an interface to call Hets and analyze a Document
-    class CallerAnalysis < Caller
+    class AnalysisCaller < Caller
       attr_reader :additional_url_mappings, :commit_sha, :file_path,
         :file_version_id, :libdir, :repository_slug, :server_url
 
