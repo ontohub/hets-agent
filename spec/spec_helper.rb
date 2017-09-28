@@ -2,6 +2,8 @@
 
 require_relative 'support/simplecov'
 
+ENV['HETS_RABBITMQ_WRAPPER_ENV'] = 'test'
+
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'hets-agent'
