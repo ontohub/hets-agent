@@ -3,46 +3,44 @@
 require 'spec_helper'
 
 describe HetsAgent::Subscriber do
-  let(:bunny_spy) { :bunny_spy }
-  subject { HetsAgent::Subscriber.new }
+  subject { HetsAgent::Subscriber.new(BunnyMock.new) }
+  let(:queue) { subject.call }
+  let(:session) { queue.channel.connection }
+  let(:version_requirement) { '~> 0.1.0' }
+  let(:version) { '0.1.1' }
+  let(:queue_name) { "parsing-version-#{version}" }
+
+  before do
+    allow_any_instance_of(HetsAgent::Hets::VersionCaller).
+      to receive(:call).
+      and_return(version)
+  end
 
   context 'hets_version' do
-    let(:version_timestamp) { 1_471_209_385 }
-    let(:version) { "v0.99, #{version_timestamp}" }
+    it 'has the correct version' do
+      expect(subject.hets_version).to eq(version)
+    end
+  end
+
+  context 'minimal parsing version queue' do
+    it 'subscribe to' do
+      expect(session.queue_exists?('q_min_parsing_version')).to be_truthy
+    end
+  end
+
+  context 'worker queue' do
     before do
-      allow(Bunny).to receive(:new).and_return(bunny_spy)
       allow(subject).
         to receive(:call_hets_version).and_return(version)
+      queue.publish(version)
     end
 
-    it 'parses the version correctly' do
-      expect(subject.hets_version).to eq(version_timestamp)
+    it 'subscribes successfully' do
+      expect(session.queue_exists?(queue_name)).to be(true)
     end
 
-    context 'unreachable hets' do
-      before do
-        allow(subject).
-          to receive(:call_hets_version).and_raise(Errno::ECONNREFUSED)
-      end
-
-      it 'raises the correct error on unreachable hets' do
-        expect { subject.hets_version }.
-          to raise_error(HetsAgent::HetsUnreachableError,
-                         'Hets unreachable')
-      end
-    end
-
-    context 'could not parse hets version' do
-      before do
-        allow(subject).
-          to receive(:call_hets_version).and_return('I am not a version')
-      end
-
-      it 'raises the correct error on unparseable version' do
-        expect { subject.hets_version }.
-          to raise_error(HetsAgent::HetsVersionParsingError,
-                         'Could not parse Hets version')
-      end
+    it 'receives message' do
+      session.queues[queue_name].publish('Foobar')
     end
   end
 end

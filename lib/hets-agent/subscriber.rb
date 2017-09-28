@@ -23,30 +23,10 @@ module HetsAgent
 
     # get version from HetsInstance and parse it
     def hets_version
-      @hets_version ||= parse_hets_version(call_hets_version)
-    rescue Errno::ECONNREFUSED
-      raise HetsAgent::HetsUnreachableError, 'Hets unreachable'
+      @hets_version ||= HetsAgent::Hets::VersionCaller.new.call
     end
 
     private
-
-    # call hets version, stubbed out in the tests
-    # :nocov:
-    def call_hets_version
-      RestClient::Request.
-        execute(method: :get,
-                url: 'http://localhost:8000/version',
-                timeout: 3).to_s
-    end
-    # :nocov:
-
-    # parse hets version
-    def parse_hets_version(version)
-      version.match(/(\d+)\z/)[0].to_i
-    rescue NoMethodError
-      raise HetsAgent::HetsVersionParsingError,
-      'Could not parse Hets version'
-    end
 
     # Binds queue to exchange and subscribes to mininmal parsing version queue
     def subscribe_min_parsing_version_queue
@@ -54,8 +34,8 @@ module HetsAgent
       q_min_parsing_version.bind('ex_min_parsing_version')
       q_min_parsing_version.
         subscribe(block: true,
-                  timeout: 0) do |_delivery_info, _properties, min_version|
-        subscribe_worker_queue(min_version)
+                  timeout: 0) do |_delivery_info, _properties, requirement|
+        subscribe_worker_queue(requirement)
       end
     end
 
@@ -69,9 +49,12 @@ module HetsAgent
     end
 
     # Subscribes to worker queue if min version is <= own version
-    def subscribe_worker_queue(min_version)
-      queues = create_worker_queue(min_version)
-      return unless parse_hets_version(min_version) <= hets_version
+    def subscribe_worker_queue(requirement)
+      queues = create_worker_queue(requirement)
+      unless Gem::Requirement.new(*requirement.split(',')).
+          satisfied_by?(Gem::Version.new(hets_version))
+        return
+      end
       queues.
         subscribe(block: false, manual_ack: true,
                   timeout: 0) do |delivery_info, _properties, _body|
@@ -81,11 +64,10 @@ module HetsAgent
     end
 
     # Creates a worker queue depending on the min parsing version
-    def create_worker_queue(min_version)
+    def create_worker_queue(requirement)
       channel = @connection.create_channel
       channel.prefetch(1)
-      min_version = parse_hets_version(min_version)
-      channel.queue("parsing-version-#{min_version}", auto_delete: true)
+      channel.queue("parsing-version-#{requirement}", auto_delete: true)
     end
   end
 end
