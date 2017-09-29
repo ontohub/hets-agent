@@ -5,6 +5,7 @@ require 'hets-agent/application'
 require 'hets-agent/error'
 require 'hets-agent/hets'
 require 'hets-agent/version'
+require 'json'
 require 'rest-client'
 
 module HetsAgent
@@ -52,23 +53,63 @@ module HetsAgent
 
     # Subscribes to worker queue if min version is <= own version
     def subscribe_worker_queue(requirement)
-      unless Gem::Requirement.new(*requirement.split(',')).
-          satisfied_by?(Gem::Version.new(hets_version))
-        return
-      end
+      return unless version_requirement_satisfied?(requirement)
       queue = create_worker_queue(requirement)
+      print_listening(requirement) if print?
       queue.subscribe(block: false, manual_ack: true,
                       timeout: 0) do |delivery_info, _properties, body|
         queue.channel.acknowledge(delivery_info.delivery_tag)
-        # TODO: push body to hets
+        call_hets(JSON.parse(body))
       end
+    end
+
+    def version_requirement_satisfied?(requirement)
+      Gem::Requirement.new(*requirement.split(',')).
+        satisfied_by?(Gem::Version.new(hets_version))
     end
 
     # Creates a worker queue depending on the min parsing version
     def create_worker_queue(requirement)
       channel = @connection.create_channel
       channel.prefetch(1)
-      channel.queue("hets #{requirement}", auto_delete: true)
+      channel.queue(worker_queue_name(requirement), auto_delete: true)
+    end
+
+    def worker_queue_name(requirement)
+      "hets #{requirement}"
+    end
+
+    def call_hets(data)
+      case data['action']
+      when 'analysis'
+        call_hets_analysis(data['arguments'])
+      when 'version'
+        HetsAgent::Hets::VersionCaller.new.call
+      else
+        $stderr.puts %(Unrecognized action: "#{data['action']}") if print?
+        nil
+      end
+    end
+
+    def call_hets_analysis(arguments)
+      symbolized_arguments = {}
+      %i(file_path file_version_id repository_slug revision server_url
+         url_mappings).each do |key|
+        symbolized_arguments[key] = arguments[key.to_s]
+      end
+      HetsAgent::Hets::AnalysisCaller.new(symbolized_arguments).call
+    end
+
+    def print?
+      !HetsAgent::Application.env.test?
+    end
+
+    def print_listening(requirement)
+      # :nocov:
+      id = HetsAgent::Application.id
+      queue_name = worker_queue_name(requirement)
+      $stderr.puts %(Worker #{id} listening to queue "#{queue_name}")
+      # :nocov:
     end
   end
 end

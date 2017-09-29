@@ -53,11 +53,7 @@ describe HetsAgent::Application do
         end
 
         after do
-          if @old_env.nil?
-            ENV.delete('HETS_AGENT_ID')
-          else
-            ENV['HETS_AGENT_ID'] = @old_env
-          end
+          ENV['HETS_AGENT_ID'] = @old_env
         end
 
         it 'have a valid hets.path' do

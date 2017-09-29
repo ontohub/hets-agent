@@ -23,7 +23,7 @@ describe HetsAgent::Hets::AnalysisCaller do
 
     let(:arguments) do
       {
-        commit_sha: '0123456789abcdef0123456789abcdef01234567',
+        revision: '0123456789abcdef0123456789abcdef01234567',
         file_path: 'Hets-lib/Basic/RelationsAndOrders.casl',
         file_version_id: 23,
         repository_slug: 'ada/fixtures',
@@ -47,7 +47,7 @@ describe HetsAgent::Hets::AnalysisCaller do
         File.join(arguments[:server_url],
                   arguments[:repository_slug],
                   'revision',
-                  arguments[:commit_sha],
+                  arguments[:revision],
                   'tree')
       end
 
@@ -91,14 +91,14 @@ describe HetsAgent::Hets::AnalysisCaller do
                       'tree') => File.join(arguments[:server_url],
                                            arguments[:repository_slug],
                                            'revision',
-                                           arguments[:commit_sha],
+                                           arguments[:revision],
                                            'tree'),
             File.join(arguments[:server_url],
                       arguments[:repository_slug],
                       'documents') => File.join(arguments[:server_url],
                                                 arguments[:repository_slug],
                                                 'revision',
-                                                arguments[:commit_sha],
+                                                arguments[:revision],
                                                 'documents'),
           }.merge(arguments[:url_mappings])
         url_catalog =

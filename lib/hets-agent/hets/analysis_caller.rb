@@ -6,23 +6,23 @@ module HetsAgent
   module Hets
     # Provides an interface to call Hets and analyze a Document
     class AnalysisCaller < Caller
-      attr_reader :additional_url_mappings, :commit_sha, :file_path,
+      attr_reader :additional_url_mappings, :revision, :file_path,
         :file_version_id, :libdir, :repository_slug, :server_url
 
       # rubocop: disable Metrics/ParameterLists
-      def initialize(commit_sha:, file_path:, file_version_id:,
-                     repository_slug:, server_url:, url_mappings:)
+      def initialize(file_path:, file_version_id:, repository_slug:, revision:,
+                     server_url:, url_mappings:)
         # rubocop: enable Metrics/ParameterLists
         super()
         @additional_url_mappings = url_mappings
-        @commit_sha = commit_sha
+        @revision = revision
         @file_path = file_path
         @file_version_id = file_version_id
         @repository_slug = repository_slug
         @server_url = server_url
 
         @libdir =
-          File.join(server_url, repository_slug, 'revision', commit_sha, 'tree')
+          File.join(server_url, repository_slug, 'revision', revision, 'tree')
       end
 
       def call
@@ -77,7 +77,7 @@ module HetsAgent
         url_mappings = {}
         %w(tree documents).each do |namespace|
           url_mappings[File.join(server_url, repository_slug, namespace)] =
-            File.join(server_url, repository_slug, 'revision', commit_sha,
+            File.join(server_url, repository_slug, 'revision', revision,
                       namespace)
         end
         url_mappings
