@@ -2,7 +2,7 @@
 
 require_relative 'support/simplecov'
 
-ENV['HETS_RABBITMQ_WRAPPER_ENV'] = 'test'
+ENV['HETS_AGENT_ENV'] = 'test'
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 

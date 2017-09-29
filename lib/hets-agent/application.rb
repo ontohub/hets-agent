@@ -7,7 +7,7 @@ module HetsAgent
   # The Application class encapsulates some basic properties.
   class Application
     ROOT = Pathname.new(File.expand_path('../../../', __FILE__)).freeze
-    ENVIRONMENT = (ENV['HETS_RABBITMQ_WRAPPER_ENV'] || 'development').freeze
+    ENVIRONMENT = (ENV['HETS_AGENT_ENV'] || 'development').freeze
 
     class << self
       def root
@@ -28,6 +28,10 @@ module HetsAgent
 
         normalize_paths
         true
+      end
+
+      def id
+        (ENV['HETS_AGENT_ID'] || Settings.agent.id).to_s
       end
 
       private

@@ -12,7 +12,7 @@ describe HetsAgent::Subscriber do
   let(:session) { queue.channel.connection }
   let(:version_requirement) { '~> 0.1.0' }
   let(:version) { '0.1.5' }
-  let(:queue_name) { "hets-#{version_requirement}" }
+  let(:queue_name) { "hets #{version_requirement}" }
 
   before do
     allow_any_instance_of(HetsAgent::Hets::VersionCaller).
@@ -28,7 +28,9 @@ describe HetsAgent::Subscriber do
 
   context 'minimal parsing version queue' do
     it 'subscribe to' do
-      expect(session.queue_exists?('q_hets_version_requirement')).to be(true)
+      id = HetsAgent::Application.id
+      expect(session.queue_exists?("q_hets_version_requirement-#{id}")).
+        to be(true)
     end
   end
 

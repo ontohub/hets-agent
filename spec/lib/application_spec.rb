@@ -38,5 +38,32 @@ describe HetsAgent::Application do
         expect(Settings.hets.path).to be_a(Pathname)
       end
     end
+
+    context 'id' do
+      context 'without environment variable' do
+        it 'have a valid hets.path' do
+          expect(HetsAgent::Application.id).to eq('4711')
+        end
+      end
+
+      context 'with the environment variable' do
+        before do
+          @old_env = ENV['HETS_AGENT_ID']
+          ENV['HETS_AGENT_ID'] = '1337'
+        end
+
+        after do
+          if @old_env.nil?
+            ENV.delete('HETS_AGENT_ID')
+          else
+            ENV['HETS_AGENT_ID'] = @old_env
+          end
+        end
+
+        it 'have a valid hets.path' do
+          expect(HetsAgent::Application.id).to eq('1337')
+        end
+      end
+    end
   end
 end

@@ -1,2 +1,5 @@
 hets:
   path: /usr/bin/false
+
+agent:
+  id: 4711

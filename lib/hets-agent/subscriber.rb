@@ -44,10 +44,10 @@ module HetsAgent
       channel = @connection.create_channel
       channel.exchange('ex_hets_version_requirement',
                        type: 'x-recent-history',
+                       durable: true,
                        arguments: {'x-recent-history-length' => 1})
-      channel.queue('q_hets_version_requirement',
-                    durable: true,
-                    auto_delete: false)
+      channel.queue("q_hets_version_requirement-#{HetsAgent::Application.id}",
+                    auto_delete: true)
     end
 
     # Subscribes to worker queue if min version is <= own version
@@ -58,7 +58,7 @@ module HetsAgent
       end
       queue = create_worker_queue(requirement)
       queue.subscribe(block: false, manual_ack: true,
-                      timeout: 0) do |delivery_info, _properties, _body|
+                      timeout: 0) do |delivery_info, _properties, body|
         queue.channel.acknowledge(delivery_info.delivery_tag)
         # TODO: push body to hets
       end
@@ -68,7 +68,7 @@ module HetsAgent
     def create_worker_queue(requirement)
       channel = @connection.create_channel
       channel.prefetch(1)
-      channel.queue("hets-#{requirement}", auto_delete: true)
+      channel.queue("hets #{requirement}", auto_delete: true)
     end
   end
 end
