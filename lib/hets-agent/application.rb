@@ -15,11 +15,13 @@ module HetsAgent
       end
 
       def env
-        environment = ENVIRONMENT.dup
+        return @env if @env
+
+        @env = ENVIRONMENT.dup
         %w(test development production).each do |e|
-          environment.define_singleton_method("#{e}?") { ENVIRONMENT == e }
+          @env.define_singleton_method("#{e}?") { ENVIRONMENT == e }
         end
-        environment
+        @env
       end
 
       def boot
