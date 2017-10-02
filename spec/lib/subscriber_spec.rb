@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'ostruct'
 
 describe HetsAgent::Subscriber do
   before do
@@ -13,11 +14,12 @@ describe HetsAgent::Subscriber do
   let(:version_requirement) { '~> 0.1.0' }
   let(:version) { '0.1.5' }
   let(:queue_name) { "hets #{version_requirement}" }
+  let(:hets_response_version) { HetsAgent::Hets::Response.new(version, 0) }
 
   before do
-    allow_any_instance_of(HetsAgent::Hets::VersionCaller).
+    allow(HetsAgent::Hets::Caller).
       to receive(:call).
-      and_return(version)
+      and_return(hets_response_version)
   end
 
   context 'hets_version' do
@@ -36,7 +38,6 @@ describe HetsAgent::Subscriber do
 
   context 'worker queue' do
     before do
-      allow(subject).to receive(:call_hets_version).and_return(version)
       queue.publish(version_requirement)
     end
 
@@ -60,7 +61,7 @@ describe HetsAgent::Subscriber do
 
       context 'version call' do
         before do
-          expect_any_instance_of(HetsAgent::Hets::VersionCaller).
+          expect(HetsAgent::Hets::Caller).
             to receive(:call)
         end
 
@@ -75,10 +76,8 @@ describe HetsAgent::Subscriber do
 
       context 'analysis call' do
         before do
-          allow(HetsAgent::Hets::AnalysisCaller).
+          allow(HetsAgent::Hets::AnalysisRequest).
             to receive(:new).and_call_original
-          expect_any_instance_of(HetsAgent::Hets::AnalysisCaller).
-            to receive(:call)
         end
 
         let(:data) do
@@ -109,7 +108,7 @@ describe HetsAgent::Subscriber do
 
         it 'receives the message' do
           session.queues[queue_name].publish(data)
-          expect(HetsAgent::Hets::AnalysisCaller).
+          expect(HetsAgent::Hets::AnalysisRequest).
             to have_received(:new).
             with(symbolized_arguments)
         end
@@ -117,19 +116,19 @@ describe HetsAgent::Subscriber do
 
       context 'unkown action' do
         before do
-          allow(HetsAgent::Hets::AnalysisCaller).to receive(:new)
-          allow(HetsAgent::Hets::VersionCaller).to receive(:new)
-          session.queues[queue_name].publish(data)
+          %i(call_hets_analysis call_hets_version).each do |method|
+            allow_any_instance_of(subject.class).
+              to receive(method).
+              and_call_original
+            expect_any_instance_of(subject.class).
+              not_to receive(method)
+          end
         end
 
         let(:data) { {'action' => 'unkown'}.to_json }
 
-        it 'does not call the AnalysisCaller' do
-          expect(HetsAgent::Hets::AnalysisCaller).not_to have_received(:new)
-        end
-
-        it 'does not call the VersionCaller' do
-          expect(HetsAgent::Hets::VersionCaller).not_to have_received(:new)
+        it 'does not call Hets' do
+          session.queues[queue_name].publish(data)
         end
       end
     end

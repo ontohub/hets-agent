@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'hets-agent/hets/caller'
+require 'hets-agent/hets/request'
 
 module HetsAgent
   module Hets
-    # Provides an interface to call Hets and analyze a Document
-    class AnalysisCaller < Caller
+    # Forms an analysis request to Hets
+    class AnalysisRequest < Request
       attr_reader :additional_url_mappings, :revision, :file_path,
         :file_version_id, :libdir, :repository_slug, :server_url
 
@@ -23,10 +23,6 @@ module HetsAgent
 
         @libdir =
           File.join(server_url, repository_slug, 'revision', revision, 'tree')
-      end
-
-      def call
-        system(*arguments)
       end
 
       def arguments

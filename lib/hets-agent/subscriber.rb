@@ -24,7 +24,8 @@ module HetsAgent
 
     # get version from HetsInstance and parse it
     def hets_version
-      @hets_version ||= HetsAgent::Hets::VersionCaller.new.call
+      @hets_version ||=
+        HetsAgent::Hets::Caller.call(HetsAgent::Hets::VersionRequest.new).output
     end
 
     private
@@ -58,7 +59,8 @@ module HetsAgent
       print_listening(requirement) if print?
       queue.subscribe(block: false, manual_ack: true,
                       timeout: 0) do |delivery_info, _properties, body|
-        if call_hets(JSON.parse(body))
+        response = call_hets(JSON.parse(body))
+        if response&.status&.zero?
           queue.channel.acknowledge(delivery_info.delivery_tag)
         end
       end
@@ -85,7 +87,7 @@ module HetsAgent
       when 'analysis'
         call_hets_analysis(data['arguments'])
       when 'version'
-        HetsAgent::Hets::VersionCaller.new.call
+        call_hets_version(data['arguments'])
       else
         $stderr.puts %(Unrecognized action: "#{data['action']}") if print?
         nil
@@ -99,7 +101,12 @@ module HetsAgent
       symbolized_arguments = arguments.
         map { |key, value| [key.to_sym, value] }.to_h.
         select { |key, _value| accepted_arguments.include?(key) }
-      HetsAgent::Hets::AnalysisCaller.new(symbolized_arguments).call
+      HetsAgent::Hets::Caller.
+        call(HetsAgent::Hets::AnalysisRequest.new(symbolized_arguments))
+    end
+
+    def call_hets_version(_arguments)
+      HetsAgent::Hets::Caller.call(HetsAgent::Hets::VersionRequest.new)
     end
 
     def print?

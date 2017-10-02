@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe HetsAgent::Hets::AnalysisCaller do
+describe HetsAgent::Hets::AnalysisRequest do
   before do
     HetsAgent::Application.boot
   end
@@ -12,14 +12,7 @@ describe HetsAgent::Hets::AnalysisCaller do
       allow_any_instance_of(Kernel).to receive(:system)
     end
 
-    let(:analysis_caller) { HetsAgent::Hets::AnalysisCaller.new(arguments) }
-
-    # Since we test with
-    # expect_any_instance_of(Kernel).to receive(:system).with(...)
-    # The caller needs to be called after executing the it-block.
-    after do
-      analysis_caller.call
-    end
+    subject { HetsAgent::Hets::AnalysisRequest.new(arguments) }
 
     let(:arguments) do
       {
@@ -32,14 +25,8 @@ describe HetsAgent::Hets::AnalysisCaller do
       }
     end
 
-    it 'calls hets with the arguments' do
-      expect_any_instance_of(Kernel).
-        to receive(:system).
-        with(*analysis_caller.arguments)
-    end
-
     it 'has hets as the first argument' do
-      expect(analysis_caller.arguments.first).to eq(Settings.hets.path.to_s)
+      expect(subject.arguments.first).to eq(Settings.hets.path.to_s)
     end
 
     context 'the arguments contain the' do
@@ -52,34 +39,34 @@ describe HetsAgent::Hets::AnalysisCaller do
       end
 
       it 'verbosity' do
-        expect(analysis_caller.arguments).to include('--verbose=5')
+        expect(subject.arguments).to include('--verbose=5')
       end
 
       it 'output type' do
-        expect(analysis_caller.arguments).to include('--output-types=db')
+        expect(subject.arguments).to include('--output-types=db')
       end
 
       it 'database.yml' do
         database_yml = HetsAgent::Application.root.join('config/database.yml')
-        expect(analysis_caller.arguments).
+        expect(subject.arguments).
           to include("--database-config=#{database_yml}")
       end
 
       it 'database subconfig' do
-        expect(analysis_caller.arguments).
+        expect(subject.arguments).
           to include("--database-subconfig=#{HetsAgent::Application.env}")
       end
 
       it 'hets-libdirs' do
-        expect(analysis_caller.arguments).to include("--hets-libdirs=#{libdir}")
+        expect(subject.arguments).to include("--hets-libdirs=#{libdir}")
       end
 
       it 'automatic rule' do
-        expect(analysis_caller.arguments).to include('--apply-automatic-rule')
+        expect(subject.arguments).to include('--apply-automatic-rule')
       end
 
       it 'file_version_id' do
-        expect(analysis_caller.arguments).
+        expect(subject.arguments).
           to include("--database-fileversion-id=#{arguments[:file_version_id]}")
       end
 
@@ -103,12 +90,12 @@ describe HetsAgent::Hets::AnalysisCaller do
           }.merge(arguments[:url_mappings])
         url_catalog =
           url_mappings.map { |source, target| "#{source}=#{target}" }.join(',')
-        expect(analysis_caller.arguments).
+        expect(subject.arguments).
           to include("--url-catalog=#{url_catalog}")
       end
 
       it 'the filepath' do
-        expect(analysis_caller.arguments).
+        expect(subject.arguments).
           to include(File.join(libdir, arguments[:file_path]))
       end
     end
