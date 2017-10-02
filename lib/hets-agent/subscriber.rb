@@ -58,8 +58,9 @@ module HetsAgent
       print_listening(requirement) if print?
       queue.subscribe(block: false, manual_ack: true,
                       timeout: 0) do |delivery_info, _properties, body|
-        queue.channel.acknowledge(delivery_info.delivery_tag)
-        call_hets(JSON.parse(body))
+        if call_hets(JSON.parse(body))
+          queue.channel.acknowledge(delivery_info.delivery_tag)
+        end
       end
     end
 
