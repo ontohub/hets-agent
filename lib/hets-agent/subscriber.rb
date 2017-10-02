@@ -93,11 +93,12 @@ module HetsAgent
     end
 
     def call_hets_analysis(arguments)
-      symbolized_arguments = {}
-      %i(file_path file_version_id repository_slug revision server_url
-         url_mappings).each do |key|
-        symbolized_arguments[key] = arguments[key.to_s]
-      end
+      accepted_arguments =
+        %i(file_path file_version_id repository_slug revision server_url
+           url_mappings)
+      symbolized_arguments = arguments.
+        map { |key, value| [key.to_sym, value] }.to_h.
+        select { |key, _value| accepted_arguments.include?(key) }
       HetsAgent::Hets::AnalysisCaller.new(symbolized_arguments).call
     end
 
