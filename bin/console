@@ -2,10 +2,10 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
-require 'hets-rabbitmq-wrapper'
+require 'hets-agent'
 
-# You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
+# Setup the application
+HetsAgent::Application.boot
 
-require 'pry'
+# Start the REPL
 Pry.start

@@ -1,6 +1,7 @@
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+    - '*.gemspec'
 
 Layout/AlignParameters:
   Enabled: false
