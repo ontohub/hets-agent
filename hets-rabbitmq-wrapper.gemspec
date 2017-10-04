@@ -38,6 +38,7 @@ Gem::Specification.new do |spec|
   # We want to have these in the production environment as well in case we need
   # to debug the application:
   spec.add_dependency 'awesome_print', '~> 1.8.0'
+  spec.add_dependency 'config', '~> 1.4.0'
   spec.add_dependency 'pry', '~> 0.11.1'
   spec.add_dependency 'pry-byebug', '~> 3.5.0'
   spec.add_dependency 'pry-rescue', '~> 1.4.5'

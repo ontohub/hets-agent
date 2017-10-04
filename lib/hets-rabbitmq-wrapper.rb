@@ -1,11 +1,12 @@
 # rubocop:disable Style/FileName
 # frozen_string_literal: true
 
-require 'hets-rabbitmq-wrapper/version'
 require 'bunny'
 require 'rest-client'
+require 'hets-rabbitmq-wrapper/version'
+require 'hets-rabbitmq-wrapper/application'
+require 'hets-rabbitmq-wrapper/hets'
 require 'hets-rabbitmq-wrapper/error'
-require 'pry'
 
 module HetsRabbitMQWrapper
   # Delivers queues for messages and decision which queues should be subscribed
