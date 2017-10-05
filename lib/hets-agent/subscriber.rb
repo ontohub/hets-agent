@@ -59,10 +59,16 @@ module HetsAgent
       print_listening(requirement) if print?
       queue.subscribe(block: false, manual_ack: true,
                       timeout: 0) do |delivery_info, _properties, body|
-        response = call_hets(JSON.parse(body))
-        if response&.status&.zero?
-          queue.channel.acknowledge(delivery_info.delivery_tag)
-        end
+        handle_job(queue, delivery_info, body)
+      end
+    end
+
+    def handle_job(queue, delivery_info, body)
+      response = call_hets(JSON.parse(body))
+      if response&.status&.zero?
+        queue.channel.acknowledge(delivery_info.delivery_tag)
+      else
+        queue.channel.reject(delivery_info.delivery_tag)
       end
     end
 
