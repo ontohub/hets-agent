@@ -88,10 +88,14 @@ module HetsAgent
       "hets #{requirement}"
     end
 
+    # rubocop:disable Metrics/MethodLength
     def call_hets(data)
+      # rubocop:enable Metrics/MethodLength
       case data['action']
       when 'analysis'
         call_hets_analysis(data['arguments'])
+      when 'migrate logic-graph'
+        call_hets_logic_graph(data['arguments'])
       when 'version'
         call_hets_version(data['arguments'])
       else
@@ -109,6 +113,10 @@ module HetsAgent
         select { |key, _value| accepted_arguments.include?(key) }
       HetsAgent::Hets::Caller.
         call(HetsAgent::Hets::AnalysisRequest.new(symbolized_arguments))
+    end
+
+    def call_hets_logic_graph(_arguments)
+      HetsAgent::Hets::Caller.call(HetsAgent::Hets::LogicGraphRequest.new)
     end
 
     def call_hets_version(_arguments)

@@ -75,6 +75,21 @@ describe HetsAgent::Subscriber do
         end
       end
 
+      context 'logic graph call' do
+        before do
+          expect(HetsAgent::Hets::Caller).
+            to receive(:call)
+        end
+
+        let(:data) do
+          {action: 'migrate logic-graph'}.to_json
+        end
+
+        it 'receives the message' do
+          session.queues[queue_name].publish(data)
+        end
+      end
+
       context 'analysis call' do
         before do
           allow(HetsAgent::Hets::AnalysisRequest).
