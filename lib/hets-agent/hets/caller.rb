@@ -9,7 +9,7 @@ module HetsAgent
     class Caller
       def self.call(request)
         HetsAgent::Hets::Response.
-          new(*HetsAgent::Popen.popen(request.arguments))
+          new(request, *HetsAgent::Popen.popen(request.arguments))
       end
     end
   end
