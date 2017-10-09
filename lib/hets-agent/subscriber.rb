@@ -11,6 +11,8 @@ require 'rest-client'
 module HetsAgent
   # Delivers queues for messages and decision which queues should be subscribed
   class Subscriber
+    EXCHANGE_NAME = 'ex_hets_version_requirement'
+
     def initialize(connection = Bunny.new)
       @connection = connection
     end
@@ -33,7 +35,7 @@ module HetsAgent
     # Binds queue to exchange and subscribes to mininmal parsing version queue
     def subscribe_version_requirement_queue
       q_version_requirement = version_requirement_queue
-      q_version_requirement.bind('ex_hets_version_requirement')
+      q_version_requirement.bind(EXCHANGE_NAME)
       q_version_requirement.
         subscribe(block: true,
                   timeout: 0) do |_delivery_info, _properties, requirement|
@@ -44,7 +46,7 @@ module HetsAgent
     # Creates an exchange and a queue for minimal parsing version
     def version_requirement_queue
       channel = @connection.create_channel
-      channel.exchange('ex_hets_version_requirement',
+      channel.exchange(EXCHANGE_NAME,
                        type: 'x-recent-history',
                        durable: true,
                        arguments: {'x-recent-history-length' => 1})
