@@ -62,6 +62,7 @@ module HetsAgent
       queue.subscribe(block: false,
                       manual_ack: true,
                       timeout: 0) do |delivery_info, _properties, body|
+        $stderr.puts "received job: #{body}" if print?
         handle_job(queue, delivery_info, body)
       end
     end
