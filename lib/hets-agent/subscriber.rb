@@ -59,7 +59,8 @@ module HetsAgent
       return unless version_requirement_satisfied?(requirement)
       queue = create_worker_queue(requirement)
       print_listening(requirement) if print?
-      queue.subscribe(block: false, manual_ack: true,
+      queue.subscribe(block: false,
+                      manual_ack: true,
                       timeout: 0) do |delivery_info, _properties, body|
         handle_job(queue, delivery_info, body)
       end
