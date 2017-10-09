@@ -84,7 +84,9 @@ module HetsAgent
     def create_worker_queue(requirement)
       channel = @connection.create_channel
       channel.prefetch(1)
-      channel.queue(worker_queue_name(requirement), auto_delete: true)
+      channel.queue(worker_queue_name(requirement),
+                    durable: true,
+                    auto_delete: false)
     end
 
     def worker_queue_name(requirement)
