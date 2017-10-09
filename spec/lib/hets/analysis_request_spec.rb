@@ -20,6 +20,11 @@ describe HetsAgent::Hets::AnalysisRequest do
 
   subject { HetsAgent::Hets::AnalysisRequest.new(arguments) }
 
+  context 'request' do
+    subject { HetsAgent::Hets::LogicGraphRequest.new }
+    it_behaves_like 'a HetsAgent::Hets::Request'
+  end
+
   context 'mocking the system call' do
     before do
       allow_any_instance_of(Kernel).to receive(:system)
