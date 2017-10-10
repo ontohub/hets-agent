@@ -7,7 +7,13 @@ describe HetsAgent::Hets::VersionRequest do
     HetsAgent::Application.boot
   end
 
-  context 'arugments' do
+  subject { HetsAgent::Hets::LogicGraphRequest.new }
+
+  context 'request' do
+    it_behaves_like 'a HetsAgent::Hets::Request'
+  end
+
+  context 'arguments' do
     it 'are correct' do
       expect(HetsAgent::Hets::VersionRequest.new.arguments).
         to eq([Settings.hets.path.to_s, '--numeric-version'])

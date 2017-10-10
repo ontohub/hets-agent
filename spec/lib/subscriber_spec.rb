@@ -14,12 +14,13 @@ describe HetsAgent::Subscriber do
   let(:version_requirement) { '~> 0.1.0' }
   let(:version) { '0.1.5' }
   let(:queue_name) { "hets #{version_requirement}" }
-  let(:hets_response_version) { HetsAgent::Hets::Response.new(version, 0) }
+  let(:request) { double(:request) }
+  let(:hets_response) { HetsAgent::Hets::Response.new(request, version, 0) }
 
   before do
     allow(HetsAgent::Hets::Caller).
       to receive(:call).
-      and_return(hets_response_version)
+      and_return(hets_response)
   end
 
   context 'hets_version' do
@@ -67,6 +68,21 @@ describe HetsAgent::Subscriber do
 
         let(:data) do
           {action: 'version'}.to_json
+        end
+
+        it 'receives the message' do
+          session.queues[queue_name].publish(data)
+        end
+      end
+
+      context 'logic graph call' do
+        before do
+          expect(HetsAgent::Hets::Caller).
+            to receive(:call)
+        end
+
+        let(:data) do
+          {action: 'migrate logic-graph'}.to_json
         end
 
         it 'receives the message' do

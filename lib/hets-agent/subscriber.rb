@@ -11,6 +11,8 @@ require 'rest-client'
 module HetsAgent
   # Delivers queues for messages and decision which queues should be subscribed
   class Subscriber
+    EXCHANGE_NAME = 'ex_hets_version_requirement'
+
     def initialize(connection = Bunny.new)
       @connection = connection
     end
@@ -33,7 +35,7 @@ module HetsAgent
     # Binds queue to exchange and subscribes to mininmal parsing version queue
     def subscribe_version_requirement_queue
       q_version_requirement = version_requirement_queue
-      q_version_requirement.bind('ex_hets_version_requirement')
+      q_version_requirement.bind(EXCHANGE_NAME)
       q_version_requirement.
         subscribe(block: true,
                   timeout: 0) do |_delivery_info, _properties, requirement|
@@ -44,7 +46,7 @@ module HetsAgent
     # Creates an exchange and a queue for minimal parsing version
     def version_requirement_queue
       channel = @connection.create_channel
-      channel.exchange('ex_hets_version_requirement',
+      channel.exchange(EXCHANGE_NAME,
                        type: 'x-recent-history',
                        durable: true,
                        arguments: {'x-recent-history-length' => 1})
@@ -57,12 +59,20 @@ module HetsAgent
       return unless version_requirement_satisfied?(requirement)
       queue = create_worker_queue(requirement)
       print_listening(requirement) if print?
-      queue.subscribe(block: false, manual_ack: true,
+      queue.subscribe(block: false,
+                      manual_ack: true,
                       timeout: 0) do |delivery_info, _properties, body|
-        response = call_hets(JSON.parse(body))
-        if response&.status&.zero?
-          queue.channel.acknowledge(delivery_info.delivery_tag)
-        end
+        $stderr.puts "received job: #{body}" if print?
+        handle_job(queue, delivery_info, body)
+      end
+    end
+
+    def handle_job(queue, delivery_info, body)
+      response = call_hets(JSON.parse(body))
+      if response&.status&.zero?
+        queue.channel.acknowledge(delivery_info.delivery_tag)
+      else
+        queue.channel.reject(delivery_info.delivery_tag)
       end
     end
 
@@ -75,17 +85,23 @@ module HetsAgent
     def create_worker_queue(requirement)
       channel = @connection.create_channel
       channel.prefetch(1)
-      channel.queue(worker_queue_name(requirement), auto_delete: true)
+      channel.queue(worker_queue_name(requirement),
+                    durable: true,
+                    auto_delete: false)
     end
 
     def worker_queue_name(requirement)
       "hets #{requirement}"
     end
 
+    # rubocop:disable Metrics/MethodLength
     def call_hets(data)
+      # rubocop:enable Metrics/MethodLength
       case data['action']
       when 'analysis'
         call_hets_analysis(data['arguments'])
+      when 'migrate logic-graph'
+        call_hets_logic_graph(data['arguments'])
       when 'version'
         call_hets_version(data['arguments'])
       else
@@ -103,6 +119,10 @@ module HetsAgent
         select { |key, _value| accepted_arguments.include?(key) }
       HetsAgent::Hets::Caller.
         call(HetsAgent::Hets::AnalysisRequest.new(symbolized_arguments))
+    end
+
+    def call_hets_logic_graph(_arguments)
+      HetsAgent::Hets::Caller.call(HetsAgent::Hets::LogicGraphRequest.new)
     end
 
     def call_hets_version(_arguments)

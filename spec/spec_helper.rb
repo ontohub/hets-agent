@@ -10,6 +10,14 @@ require 'hets-agent'
 require 'bunny-mock'
 require 'support/bunnymock_recent_history_exchange'
 
+Dir.glob('spec/support/**/*.rb').each do |file|
+  require_relative file.sub(%r{\Aspec/}, '')
+end
+
+Dir.glob('spec/shared_examples/**/*.rb').each do |file|
+  require_relative file.sub(%r{\Aspec/}, '')
+end
+
 RSpec.configure do |config|
   config.before(:suite) do
     HetsAgent::Subscriber.new(BunnyMock.new)

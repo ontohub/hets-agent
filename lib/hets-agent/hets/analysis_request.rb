@@ -57,8 +57,11 @@ module HetsAgent
       end
 
       def argument_url_catalog
-        urls = url_mappings.map { |source, target| [source, target].join('=') }
-        "--url-catalog=#{urls.join(',')}"
+        substitutions = url_mappings.map do |map|
+          source, target = map.to_a.first
+          [source, target].join('=')
+        end
+        "--url-catalog=#{substitutions.join(',')}"
       end
 
       def argument_file_path
@@ -66,15 +69,17 @@ module HetsAgent
       end
 
       def url_mappings
-        default_url_mappings.merge(@additional_url_mappings)
+        default_url_mappings + @additional_url_mappings
       end
 
       def default_url_mappings
-        url_mappings = {}
+        url_mappings = []
         %w(tree documents).each do |namespace|
-          url_mappings[File.join(server_url, repository_slug, namespace)] =
-            File.join(server_url, repository_slug, 'revision', revision,
-                      namespace)
+          mapping =
+            {File.join(server_url, repository_slug, namespace) =>
+               File.join(server_url, repository_slug, 'revision', revision,
+                         namespace)}
+          url_mappings << mapping
         end
         url_mappings
       end

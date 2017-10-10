@@ -16,6 +16,10 @@ module HetsAgent
       # Override this in the subclass
       def arguments; end
 
+      def to_s
+        arguments.join(' ')
+      end
+
       protected
 
       def argument_database_yml
