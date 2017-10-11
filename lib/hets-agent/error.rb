@@ -2,5 +2,6 @@
 
 module HetsAgent
   class Error < ::StandardError; end
-  class HetsError < Error; end
+  class BootingError < Error; end
+  class IncompatibleVersionError < Error; end
 end

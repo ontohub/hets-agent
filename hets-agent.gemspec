@@ -39,13 +39,14 @@ Gem::Specification.new do |spec|
   # We want to have these in the production environment as well in case we need
   # to debug the application:
   spec.add_dependency 'awesome_print', '~> 1.8.0'
-  spec.add_dependency 'config', '~> 1.4.0'
+  spec.add_dependency 'config', '~> 1.5.0'
   spec.add_dependency 'pry', '~> 0.11.1'
   spec.add_dependency 'pry-byebug', '~> 3.5.0'
   spec.add_dependency 'pry-rescue', '~> 1.4.5'
   spec.add_dependency 'pry-stack_explorer', '~> 0.4.9.2'
 
   # Production dependencies
-  spec.add_dependency 'bunny', '>= 2.6.2', '< 2.8.0'
-  spec.add_dependency 'rest-client', '~> 2.0.0'
+  # Sneakers depends on bunny and has the version requirement
+  spec.add_dependency 'bunny'
+  spec.add_dependency 'sneakers', '~> 2.6.0'
 end

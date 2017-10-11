@@ -20,8 +20,10 @@ Dir.glob('spec/shared_examples/**/*.rb').each do |file|
 end
 
 RSpec.configure do |config|
-  config.before(:suite) do
-    HetsAgent::Subscriber.new(BunnyMock.new)
+  config.before(:each) do
+    allow(Bunny).
+      to receive(:new).
+      and_return(BunnyMock.new)
   end
 
   config.fuubar_progress_bar_options = {format: '[%B] %c/%C',

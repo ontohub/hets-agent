@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe HetsAgent::Hets::AnalysisRequest do
   before do
-    HetsAgent::Application.boot
+    boot_application
   end
 
   let(:arguments) do

@@ -9,7 +9,7 @@ describe HetsAgent::Hets::Caller do
   let(:status) { 0 }
 
   before do
-    HetsAgent::Application.boot
+    boot_application
     allow(HetsAgent::Popen).to receive(:popen).and_return([output, status])
   end
 

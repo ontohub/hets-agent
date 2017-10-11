@@ -28,10 +28,32 @@ describe HetsAgent::Application do
     it 'the environment method production? is setup' do
       expect(HetsAgent::Application.env.production?).to be(false)
     end
+
+    context 'hets_version_requirement' do
+      context 'not received' do
+        it 'raises an error' do
+          expect { boot_application(hets_version_requirement: nil) }.
+            to raise_error(HetsAgent::BootingError,
+                           /no version requirement .*received/i)
+        end
+      end
+    end
+
+    context 'hets_version_available' do
+      context 'incompatible' do
+        it 'raises an error' do
+          expect { boot_application(hets_version_available: '2.0.0') }.
+            to raise_error(HetsAgent::IncompatibleVersionError,
+                           /does not satisfy the requirement/i)
+        end
+      end
+    end
   end
 
   context 'after booting' do
-    before { HetsAgent::Application.boot }
+    before do
+      boot_application
+    end
 
     context 'settings' do
       it 'have a valid hets.path' do
@@ -59,6 +81,25 @@ describe HetsAgent::Application do
         it 'have a valid hets.path' do
           expect(HetsAgent::Application.id).to eq('1337')
         end
+      end
+    end
+
+    context 'bunny' do
+      it 'was initialized' do
+        expect(Bunny).
+          to have_received(:new).
+          with('amqp://tester:testing@::1:25672')
+      end
+
+      it 'is available' do
+        expect(HetsAgent::Application.bunny).to be_a(BunnyMock::Session)
+      end
+    end
+
+    context 'hets_version_requirement' do
+      it 'is set' do
+        expect(HetsAgent::Application.hets_version_requirement).
+          not_to be(nil)
       end
     end
   end

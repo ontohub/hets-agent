@@ -10,6 +10,8 @@ module HetsAgent
     ENVIRONMENT = (ENV['HETS_AGENT_ENV'] || 'development').freeze
 
     class << self
+      attr_reader :bunny, :hets_version_available, :hets_version_requirement
+
       def root
         ROOT
       end
@@ -29,6 +31,10 @@ module HetsAgent
         ::Config.load_and_set_settings(setting_files)
 
         normalize_paths
+        initialize_bunny
+        initialize_version_requirement
+        initialize_version_available
+
         true
       end
 
@@ -40,6 +46,41 @@ module HetsAgent
 
       def normalize_paths
         Settings.hets.path = Pathname.new(Settings.hets.path)
+      end
+
+      def initialize_bunny
+        username = Settings.rabbitmq.username
+        password = Settings.rabbitmq.password
+        host = Settings.rabbitmq.host || 'localhost'
+        port = Settings.rabbitmq.port || 5672
+        connection_string = "amqp://#{username}:#{password}@#{host}:#{port}"
+        @bunny = Bunny.new(connection_string)
+      end
+
+      def initialize_version_requirement
+        @hets_version_requirement =
+          HetsAgent::VersionRequirementRetriever.new.call
+
+        return unless hets_version_requirement.nil?
+
+        message =
+          ['No version requirement for Hets received.',
+           'Please start the ontohub-backend and try again.'].join("\n")
+        raise HetsAgent::BootingError, message
+      end
+
+      def initialize_version_available
+        version_request = HetsAgent::Hets::VersionRequest.new
+        @hets_version_available =
+          HetsAgent::Hets::Caller.call(version_request).output
+
+        unless Gem::Requirement.new(hets_version_requirement).
+            satisfied_by?(Gem::Version.new(hets_version_available))
+          message =
+            "The available Hets version #{hets_version_available} does not "\
+            "satisfy the requirement #{hets_version_requirement}."
+          raise HetsAgent::IncompatibleVersionError, message
+        end
       end
     end
   end
