@@ -15,6 +15,7 @@ module HetsAgent
     def work(message)
       response = call_hets(JSON.parse(message))
       if response&.status&.zero?
+        publish_post_processing_job(message, :success)
         ack!
       else
         reject!
@@ -60,6 +61,13 @@ module HetsAgent
 
     def call_hets_version(_arguments)
       HetsAgent::Hets::Caller.call(HetsAgent::Hets::VersionRequest.new)
+    end
+
+    def publish_post_processing_job(original_message, result)
+      message = {job_class: 'PostProcessHetsJob',
+                 arguments: {original_arguments: original_message,
+                             result: result}}
+      Sneakers.publish(message.to_json, to_queue: :post_process_hets)
     end
   end
 end

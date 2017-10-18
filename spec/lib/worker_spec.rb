@@ -7,6 +7,7 @@ require 'ostruct'
 describe HetsAgent::Worker do
   before do
     boot_application
+    allow(Sneakers).to receive(:publish)
   end
 
   subject { HetsAgent::Worker.new }
@@ -33,6 +34,15 @@ describe HetsAgent::Worker do
       it 'does not call reject!' do
         expect(subject).not_to have_received(:reject!)
       end
+
+      it 'publishes a job' do
+        job = {job_class: 'PostProcessHetsJob',
+               arguments: {original_arguments: message,
+                           result: :success}}
+        expect(Sneakers).
+          to have_received(:publish).
+          with(job.to_json, to_queue: :post_process_hets)
+      end
     end
 
     context 'failure' do
@@ -49,6 +59,10 @@ describe HetsAgent::Worker do
 
       it 'calls reject!' do
         expect(subject).to have_received(:reject!)
+      end
+
+      it 'does not publish a job' do
+        expect(Sneakers).not_to have_received(:publish)
       end
     end
   end
