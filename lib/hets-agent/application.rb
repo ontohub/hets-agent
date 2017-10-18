@@ -49,12 +49,10 @@ module HetsAgent
       end
 
       def initialize_bunny
-        username = Settings.rabbitmq.username
-        password = Settings.rabbitmq.password
-        host = Settings.rabbitmq.host || 'localhost'
-        port = Settings.rabbitmq.port || 5672
-        connection_string = "amqp://#{username}:#{password}@#{host}:#{port}"
-        @bunny = Bunny.new(connection_string)
+        @bunny = Bunny.new(username: Settings.rabbitmq.username,
+                           password: Settings.rabbitmq.password,
+                           host: Settings.rabbitmq.host,
+                           port: Settings.rabbitmq.port)
       end
 
       def initialize_version_requirement

@@ -88,7 +88,10 @@ describe HetsAgent::Application do
       it 'was initialized' do
         expect(Bunny).
           to have_received(:new).
-          with('amqp://tester:testing@::1:25672')
+          with(username: 'tester',
+               password: 'testing',
+               host: '::1',
+               port: 25672)
       end
 
       it 'is available' do
