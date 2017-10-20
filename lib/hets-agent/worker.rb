@@ -63,10 +63,10 @@ module HetsAgent
       HetsAgent::Hets::Caller.call(HetsAgent::Hets::VersionRequest.new)
     end
 
-    def publish_post_processing_job(original_message, result)
+    def publish_post_processing_job(original_job_message, result)
       message = {job_class: 'PostProcessHetsJob',
-                 arguments: {original_arguments: original_message,
-                             result: result}}
+                 arguments: [result, original_job_message]}
+      Sneakers.logger.info("publishing post processing job #{message}")
       Sneakers.publish(message.to_json, to_queue: :post_process_hets)
     end
   end

@@ -34,6 +34,18 @@ module BootingHelper
     allow(HetsAgent::Hets::Caller).
       to receive(:call).
       and_call_original
+
+    stub_sneakers_logger
+  end
+
+  protected
+
+  def stub_sneakers_logger
+    logger = double(logger)
+    allow(Sneakers).to receive(:logger).and_return(logger)
+    %i(level= debug info warn error fatal).each do |method|
+      allow(logger).to receive(method)
+    end
   end
 end
 

@@ -37,8 +37,7 @@ describe HetsAgent::Worker do
 
       it 'publishes a job' do
         job = {job_class: 'PostProcessHetsJob',
-               arguments: {original_arguments: message,
-                           result: :success}}
+               arguments: [:success, message]}
         expect(Sneakers).
           to have_received(:publish).
           with(job.to_json, to_queue: :post_process_hets)
