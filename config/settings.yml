@@ -9,3 +9,6 @@ rabbitmq:
   port: 5672
   username: guest
   password: guest
+
+sneakers:
+  workers: 1
