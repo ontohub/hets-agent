@@ -9,6 +9,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'hets-agent'
 require 'bunny-mock'
 require 'support/bunnymock_recent_history_exchange'
+require 'fuubar'
 
 Dir.glob('spec/support/**/*.rb').each do |file|
   require_relative file.sub(%r{\Aspec/}, '')
@@ -22,4 +23,8 @@ RSpec.configure do |config|
   config.before(:suite) do
     HetsAgent::Subscriber.new(BunnyMock.new)
   end
+
+  config.fuubar_progress_bar_options = {format: '[%B] %c/%C',
+                                        progress_mark: '#',
+                                        remainder_mark: '-'}
 end
