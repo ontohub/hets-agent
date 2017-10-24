@@ -28,9 +28,7 @@ module HetsAgent
       def arguments
         [hets_path,
          argument_verbosity,
-         argument_database_output,
-         argument_database_yml,
-         argument_database_subconfig,
+         *arguments_database,
          argument_libdirs,
          argument_automatic_rule,
          argument_file_version_id,

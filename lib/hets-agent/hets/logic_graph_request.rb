@@ -9,9 +9,7 @@ module HetsAgent
       def arguments
         [
           hets_path,
-          argument_database_output,
-          argument_database_yml,
-          argument_database_subconfig,
+          *arguments_database,
           '--logic-graph',
         ]
       end

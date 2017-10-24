@@ -22,6 +22,17 @@ module HetsAgent
 
       protected
 
+      def arguments_database
+        [argument_database_output,
+         argument_database_yml,
+         argument_database_subconfig,
+         argument_database_migration]
+      end
+
+      def argument_database_output
+        '--output-types=db'
+      end
+
       def argument_database_yml
         "--database-config=#{@database_yml}"
       end
@@ -30,8 +41,8 @@ module HetsAgent
         "--database-subconfig=#{@env}"
       end
 
-      def argument_database_output
-        '--output-types=db'
+      def argument_database_migration
+        '--database-do-not-migrate'
       end
     end
   end

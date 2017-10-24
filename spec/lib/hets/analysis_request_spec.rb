@@ -20,18 +20,12 @@ describe HetsAgent::Hets::AnalysisRequest do
 
   subject { HetsAgent::Hets::AnalysisRequest.new(arguments) }
 
-  context 'request' do
-    subject { HetsAgent::Hets::LogicGraphRequest.new }
-    it_behaves_like 'a HetsAgent::Hets::Request'
-  end
+  it_behaves_like 'a HetsAgent::Hets::Request'
+  it_behaves_like 'a database request'
 
   context 'mocking the system call' do
     before do
       allow_any_instance_of(Kernel).to receive(:system)
-    end
-
-    it 'has hets as the first argument' do
-      expect(subject.arguments.first).to eq(Settings.hets.path.to_s)
     end
 
     context 'the arguments contain the' do
@@ -45,21 +39,6 @@ describe HetsAgent::Hets::AnalysisRequest do
 
       it 'verbosity' do
         expect(subject.arguments).to include('--verbose=5')
-      end
-
-      it 'output type' do
-        expect(subject.arguments).to include('--output-types=db')
-      end
-
-      it 'database.yml' do
-        database_yml = HetsAgent::Application.root.join('config/database.yml')
-        expect(subject.arguments).
-          to include("--database-config=#{database_yml}")
-      end
-
-      it 'database subconfig' do
-        expect(subject.arguments).
-          to include("--database-subconfig=#{HetsAgent::Application.env}")
       end
 
       it 'hets-libdirs' do
