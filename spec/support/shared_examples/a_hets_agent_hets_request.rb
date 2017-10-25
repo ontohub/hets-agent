@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.shared_examples 'a HetsAgent::Hets::Request' do
   context 'to_s' do
     it 'matches the arguments' do

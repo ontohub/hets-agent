@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe HetsAgent::Hets::VersionRequest do
   before do
-    HetsAgent::Application.boot
+    boot_application
   end
 
   subject { HetsAgent::Hets::LogicGraphRequest.new }

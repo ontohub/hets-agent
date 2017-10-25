@@ -3,3 +3,9 @@ hets:
 
 agent:
   id: 4711
+
+rabbitmq:
+  host: '::1'
+  port: 25672
+  username: 'tester'
+  password: 'testing'

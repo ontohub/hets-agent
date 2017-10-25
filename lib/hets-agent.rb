@@ -4,6 +4,5 @@
 require 'hets-agent/application'
 require 'hets-agent/error'
 require 'hets-agent/hets'
-require 'hets-agent/subscriber'
 require 'hets-agent/version'
-require 'pry'
+require 'hets-agent/version_requirement_retriever'

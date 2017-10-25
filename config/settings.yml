@@ -3,3 +3,12 @@ hets:
 
 agent:
   id: 1
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
+
+sneakers:
+  workers: 1
