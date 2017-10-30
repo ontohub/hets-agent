@@ -1,4 +1,4 @@
-# rubocop:disable Style/FileName
+# rubocop:disable Naming/FileName
 # frozen_string_literal: true
 
 require 'spec_helper'
