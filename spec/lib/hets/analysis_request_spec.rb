@@ -41,6 +41,11 @@ describe HetsAgent::Hets::AnalysisRequest do
         expect(subject.arguments).to include('--verbose=5')
       end
 
+      it 'authorization' do
+        expect(subject.arguments).
+          to include('--http-request-header=Authorization: ApiKey test_api_key')
+      end
+
       it 'hets-libdirs' do
         expect(subject.arguments).to include("--hets-libdirs=#{libdir}")
       end

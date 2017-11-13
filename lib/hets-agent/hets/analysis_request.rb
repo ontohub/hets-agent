@@ -28,6 +28,7 @@ module HetsAgent
       def arguments
         [hets_path,
          argument_verbosity,
+         argument_authorization,
          *arguments_database,
          argument_libdirs,
          argument_automatic_rule,

@@ -22,6 +22,11 @@ module HetsAgent
 
       protected
 
+      def argument_authorization
+        key = Settings.backend.api_key
+        "--http-request-header=Authorization: ApiKey #{key}"
+      end
+
       def arguments_database
         [argument_database_output,
          argument_database_yml,
