@@ -11,6 +11,8 @@ notifications:
   email: false
 
 before_install:
+  # This is a workaround for a problem with a specific version of bundler and
+  # rubygems
   - gem update --system
 
 script:
