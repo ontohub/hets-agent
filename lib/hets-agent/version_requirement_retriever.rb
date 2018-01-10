@@ -5,11 +5,10 @@ require 'bunny'
 module HetsAgent
   # Retrieves the version requirement of Hets from the backend.
   class VersionRequirementRetriever
-    EXCHANGE_NAME = 'ex_hets_version_requirement'
+    attr_reader :connection, :exchange_name
 
-    attr_reader :connection
-
-    def initialize
+    def initialize(exchange_name)
+      @exchange_name = exchange_name
       @connection = HetsAgent::Application.bunny
     end
 
@@ -36,7 +35,7 @@ module HetsAgent
     end
 
     def link_to_exchange(channel)
-      channel.exchange(EXCHANGE_NAME,
+      channel.exchange(@exchange_name,
                        type: 'x-recent-history',
                        durable: true,
                        arguments: {'x-recent-history-length' => 1})
@@ -44,7 +43,7 @@ module HetsAgent
 
     def setup_version_requirement_queue(channel)
       queue = channel.queue(queue_name, auto_delete: true)
-      queue.bind(EXCHANGE_NAME)
+      queue.bind(@exchange_name)
       queue
     end
 

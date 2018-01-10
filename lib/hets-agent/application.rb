@@ -57,7 +57,8 @@ module HetsAgent
 
       def initialize_version_requirement
         @hets_version_requirement =
-          HetsAgent::VersionRequirementRetriever.new.call
+          HetsAgent::VersionRequirementRetriever.
+          new("#{Settings.rabbitmq.exchange}_hets_version_requirement").call
 
         return unless hets_version_requirement.nil?
 
