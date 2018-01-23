@@ -10,5 +10,7 @@ backend:
 rabbitmq:
   host: '::1'
   port: 25672
-  username: 'tester'
-  password: 'testing'
+  username: tester
+  password: testing
+  prefix: hets_agent_test
+  exchange: hets_agent_test

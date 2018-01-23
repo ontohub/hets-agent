@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'hets-agent/worker'
 require 'ostruct'
 
-describe HetsAgent::Worker do
+describe 'HetsAgent::Worker' do
   before do
     boot_application
+    require 'hets-agent/worker'
     allow(Sneakers).to receive(:publish)
   end
 

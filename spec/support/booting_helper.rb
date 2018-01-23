@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'ostruct'
+require 'sneakers'
 
 # Helper methods for booting the application
 module BootingHelper
