@@ -12,5 +12,4 @@ rabbitmq:
   port: 25672
   username: tester
   password: testing
-  prefix: hets_agent_test
-  exchange: hets_agent_test
+  virtual_host: hets_agent_test

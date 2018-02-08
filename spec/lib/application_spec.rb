@@ -91,7 +91,8 @@ describe HetsAgent::Application do
           with(username: 'tester',
                password: 'testing',
                host: '::1',
-               port: 25672)
+               port: 25672,
+               virtual_host: 'hets_agent_test')
       end
 
       it 'is available' do

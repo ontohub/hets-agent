@@ -9,8 +9,7 @@ module HetsAgent
   # properly.
   class Worker
     include Sneakers::Worker
-    from_queue "#{Settings.rabbitmq.prefix}_"\
-               "hets #{HetsAgent::Application.hets_version_requirement}",
+    from_queue "hets #{HetsAgent::Application.hets_version_requirement}",
                timeout_job_after: nil
 
     def work(message)
