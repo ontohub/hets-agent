@@ -52,13 +52,13 @@ module HetsAgent
         @bunny = Bunny.new(username: Settings.rabbitmq.username,
                            password: Settings.rabbitmq.password,
                            host: Settings.rabbitmq.host,
-                           port: Settings.rabbitmq.port)
+                           port: Settings.rabbitmq.port,
+                           virtual_host: Settings.rabbitmq.virtual_host)
       end
 
       def initialize_version_requirement
-        @hets_version_requirement =
-          HetsAgent::VersionRequirementRetriever.
-          new("#{Settings.rabbitmq.exchange}_hets_version_requirement").call
+        @hets_version_requirement = HetsAgent::VersionRequirementRetriever.
+          new('hets_version_requirement').call
 
         return unless hets_version_requirement.nil?
 

@@ -19,8 +19,7 @@ HetsAgent::Application.boot
 # properly.
 require 'hets-agent/worker'
 
-Sneakers.configure(connection: HetsAgent::Application.bunny,
-                   exchange: ::Settings.rabbitmq.exchange)
+Sneakers.configure(connection: HetsAgent::Application.bunny)
 Sneakers.logger.level = Logger::WARN
 runner = Sneakers::Runner.new([HetsAgent::Worker], Settings.sneakers)
 runner.run

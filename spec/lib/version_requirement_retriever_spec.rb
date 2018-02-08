@@ -14,8 +14,7 @@ describe HetsAgent::VersionRequirementRetriever do
   end
 
   subject do
-    HetsAgent::VersionRequirementRetriever.
-      new("#{Settings.rabbitmq.exchange}_hets_version_requirement")
+    HetsAgent::VersionRequirementRetriever.new('hets_version_requirement')
   end
   let(:bunny_mock) { HetsAgent::Application.bunny }
 
