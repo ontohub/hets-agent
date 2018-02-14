@@ -68,7 +68,15 @@ module HetsAgent
       message = {job_class: 'PostProcessHetsJob',
                  arguments: [result, original_job_message]}
       Sneakers.logger.info("publishing post processing job #{message}")
-      Sneakers.publish(message.to_json, to_queue: :post_process_hets)
+
+      connection = Sneakers::CONFIG[:connection]
+      connection.start unless connection.open?
+      channel = connection.create_channel
+      exchange = channel.direct('sneakers', durable: true)
+
+      exchange.publish(message.to_json, routing_key: :post_process_hets)
+    ensure
+      connection.close
     end
   end
 end
