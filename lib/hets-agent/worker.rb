@@ -10,7 +10,8 @@ module HetsAgent
   class Worker
     include Sneakers::Worker
     from_queue "hets #{HetsAgent::Application.hets_version_requirement}",
-               timeout_job_after: nil
+               timeout_job_after: nil,
+               vhost: Settings.rabbitmq.virtual_host
 
     def work(message)
       response = call_hets(JSON.parse(message))
