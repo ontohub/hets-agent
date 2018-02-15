@@ -76,6 +76,7 @@ module HetsAgent
                  arguments: [result, original_job_message]}
       Sneakers.logger.info("publishing post processing job #{message}")
 
+      connection.start unless connection.open?
       exchange.publish(message.to_json, routing_key: :post_process_hets)
     ensure
       connection.close
@@ -84,11 +85,8 @@ module HetsAgent
     private
 
     def exchange
-      @exchange ||= begin
-        connection.start unless connection.open?
-        channel = connection.create_channel
-        channel.direct('sneakers', durable: true)
-      end
+      channel = connection.create_channel
+      channel.direct('sneakers', durable: true)
     end
   end
 end
