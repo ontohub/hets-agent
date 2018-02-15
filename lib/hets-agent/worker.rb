@@ -15,8 +15,8 @@ module HetsAgent
 
     attr_reader :connection
 
-    def initialize
-      super
+    def initialize(*args)
+      super(*args)
       @connection = HetsAgent::Application.bunny
     end
 
