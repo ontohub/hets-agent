@@ -21,6 +21,7 @@ end
 
 RSpec.configure do |config|
   config.before(:each) do
+    BunnyMock.use_bunny_queue_pop_api = true
     allow(Bunny).
       to receive(:new).
       and_return(BunnyMock.new)

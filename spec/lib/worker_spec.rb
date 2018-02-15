@@ -20,10 +20,18 @@ describe 'HetsAgent::Worker' do
     end
 
     context 'success' do
+      let(:exchange) { subject.send(:exchange) }
+      let(:queue) do
+        exchange.channel.queue(:post_process_hets).tap do |queue|
+          queue.bind(exchange, routing_key: :post_process_hets)
+        end
+      end
+
       before do
         allow(subject).
           to receive(:call_hets).
           and_return(OpenStruct.new(status: 0))
+        queue
         subject.work(message)
       end
 
@@ -38,9 +46,8 @@ describe 'HetsAgent::Worker' do
       it 'publishes a job' do
         job = {job_class: 'PostProcessHetsJob',
                arguments: [:success, message]}
-        expect(Sneakers).
-          to have_received(:publish).
-          with(job.to_json, to_queue: :post_process_hets)
+        payload = queue.pop
+        expect(payload[2]).to eq(job.to_json)
       end
     end
 

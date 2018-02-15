@@ -13,6 +13,13 @@ module HetsAgent
                timeout_job_after: nil,
                vhost: Settings.rabbitmq.virtual_host
 
+    attr_reader :connection
+
+    def initialize
+      super
+      @connection = HetsAgent::Application.bunny
+    end
+
     def work(message)
       response = call_hets(JSON.parse(message))
       if response&.status&.zero?
@@ -69,14 +76,19 @@ module HetsAgent
                  arguments: [result, original_job_message]}
       Sneakers.logger.info("publishing post processing job #{message}")
 
-      connection = Sneakers::CONFIG[:connection]
-      connection.start unless connection.open?
-      channel = connection.create_channel
-      exchange = channel.direct('sneakers', durable: true)
-
       exchange.publish(message.to_json, routing_key: :post_process_hets)
     ensure
       connection.close
+    end
+
+    private
+
+    def exchange
+      @exchange ||= begin
+        connection.start unless connection.open?
+        channel = connection.create_channel
+        channel.direct('sneakers', durable: true)
+      end
     end
   end
 end
