@@ -15,4 +15,5 @@ rabbitmq:
   virtual_host: ontohub_development
 
 sneakers:
+  # The number of parallel worker processes.
   workers: 1

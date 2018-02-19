@@ -27,6 +27,11 @@ module HetsAgent
       end
 
       def boot
+        # This cannot be required at the top of the file because that file
+        # itself requires the hets-agent/application.
+        require 'hets-agent/settings_schema'
+        Config.schema = Dry::Validation::Schema(SettingsSchema)
+        Config.env_parse_values = true
         setting_files = ::Config.setting_files(root.join('config'), env)
         ::Config.load_and_set_settings(setting_files)
 
