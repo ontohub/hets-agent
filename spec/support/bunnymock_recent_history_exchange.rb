@@ -3,6 +3,7 @@
 require 'bunny-mock'
 
 module BunnyMock
+  # Mock the recent history exchange extension of RabbitMQ.
   class Exchange
     # Monkeypatch, XRecentHistory be found by the ex declare "x-recent-history"
     def self.declare(channel, name = '', **opts)
@@ -16,6 +17,7 @@ module BunnyMock
     end
   end
 
+  # Mock the recent history exchange extension of RabbitMQ.
   module Exchanges
     class XRecentHistory < BunnyMock::Exchanges::Fanout
     end
