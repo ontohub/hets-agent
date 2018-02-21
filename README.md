@@ -31,7 +31,7 @@ The `backend.api_key` needs to be registered in the backend.
 We recommend to have one API-key per hets-agent instance.
 
 # Usage
-Make sure to run `rails rabbitmq:send_hets_version` from the `ontohub-backend` repository before the first
+Make sure to run `bundle exec rails rabbitmq:send_hets_version` from the `ontohub-backend` repository before the first
 start to set a version requirement.
 * To start it in the development environment, run
     ```
