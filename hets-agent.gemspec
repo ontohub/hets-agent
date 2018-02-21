@@ -30,7 +30,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 1.12'
   spec.add_development_dependency 'bunny-mock', '~> 1.7.0'
   spec.add_development_dependency 'fuubar', '~> 2.3.0'
-  spec.add_development_dependency 'rake', '~> 12.3.0'
   spec.add_development_dependency 'rspec', '~> 3.7.0'
 
   spec.add_development_dependency 'codecov', '~> 0.1.10'
@@ -44,6 +43,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'pry-byebug', '~> 3.5.0'
   spec.add_dependency 'pry-rescue', '~> 1.4.5'
   spec.add_dependency 'pry-stack_explorer', '~> 0.4.9.2'
+  spec.add_dependency 'rake', '~> 12.3.0'
 
   # Production dependencies
   # Sneakers depends on bunny and has the version requirement
