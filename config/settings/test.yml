@@ -1,5 +1,5 @@
 hets:
-  path: /usr/bin/false
+  path: spec/support/hets
 
 agent:
   id: 4711

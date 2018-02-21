@@ -2,6 +2,10 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
+
+lib = File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 require 'hets-agent'
 require 'sneakers/runner'
 
@@ -12,7 +16,6 @@ require 'sneakers/runner'
 end
 
 HetsAgent::Application.boot
-# HetsAgent::Subscriber.new.call
 
 # The worker needs to be loaded after booting. Otherwise, the version
 # requirement is not yet retrieved, hence the worker queue name is not yet set
