@@ -41,7 +41,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'awesome_print', '~> 1.8.0'
   spec.add_dependency 'config', '>= 1.5', '< 1.7'
   spec.add_dependency 'pry', '~> 0.11.1'
-  spec.add_dependency 'pry-byebug', '~> 3.5.0'
+  spec.add_dependency 'pry-byebug', '>= 3.5', '< 3.7'
   spec.add_dependency 'pry-rescue', '~> 1.4.5'
   spec.add_dependency 'pry-stack_explorer', '~> 0.4.9.2'
 
