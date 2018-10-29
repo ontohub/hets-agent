@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3.7.0'
 
   spec.add_development_dependency 'codecov', '~> 0.1.10'
-  spec.add_development_dependency 'rubocop', '~> 0.56.0'
+  spec.add_development_dependency 'rubocop', '~> 0.60.0'
 
   # We want to have these in the production environment as well in case we need
   # to debug the application:
