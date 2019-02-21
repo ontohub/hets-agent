@@ -7,7 +7,7 @@ PATH
       config (>= 1.5, < 1.8)
       pry (>= 0.11.1, < 0.13.0)
       pry-byebug (>= 3.5, < 3.7)
-      pry-rescue (~> 1.4.5)
+      pry-rescue (>= 1.4.5, < 1.6.0)
       pry-stack_explorer (~> 0.4.9.2)
       sneakers (>= 2.6, < 2.8)
 
@@ -90,9 +90,9 @@ GEM
     pry-byebug (3.6.0)
       byebug (~> 10.0)
       pry (~> 0.10)
-    pry-rescue (1.4.5)
+    pry-rescue (1.5.0)
       interception (>= 0.5)
-      pry
+      pry (>= 0.12.0)
     pry-stack_explorer (0.4.9.3)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)

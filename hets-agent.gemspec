@@ -42,7 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'config', '>= 1.5', '< 1.8'
   spec.add_dependency 'pry', '>= 0.11.1', '< 0.13.0'
   spec.add_dependency 'pry-byebug', '>= 3.5', '< 3.7'
-  spec.add_dependency 'pry-rescue', '~> 1.4.5'
+  spec.add_dependency 'pry-rescue', '>= 1.4.5', '< 1.6.0'
   spec.add_dependency 'pry-stack_explorer', '~> 0.4.9.2'
 
   # Production dependencies
