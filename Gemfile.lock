@@ -143,7 +143,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.12)
+  bundler (~> 2.0)
   bunny-mock (~> 1.7.0)
   codecov (~> 0.1.10)
   fuubar (~> 2.3.0)
@@ -153,4 +153,4 @@ DEPENDENCIES
   rubocop (~> 0.56.0)
 
 BUNDLED WITH
-   1.16.1
+   2.0.1
