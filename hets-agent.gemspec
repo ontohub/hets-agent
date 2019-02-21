@@ -48,5 +48,5 @@ Gem::Specification.new do |spec|
   # Production dependencies
   # Sneakers depends on bunny and has the version requirement
   spec.add_dependency 'bunny'
-  spec.add_dependency 'sneakers', '>= 2.6', '< 2.8'
+  spec.add_dependency 'sneakers', '>= 2.6', '< 2.12'
 end
