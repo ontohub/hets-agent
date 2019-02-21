@@ -9,7 +9,7 @@ PATH
       pry-byebug (>= 3.5, < 3.7)
       pry-rescue (>= 1.4.5, < 1.6.0)
       pry-stack_explorer (~> 0.4.9.2)
-      sneakers (>= 2.6, < 2.8)
+      sneakers (>= 2.6, < 2.12)
 
 GEM
   remote: https://rubygems.org/
@@ -24,8 +24,8 @@ GEM
     awesome_print (1.8.0)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    bunny (2.9.2)
-      amq-protocol (~> 2.3.0)
+    bunny (2.14.0)
+      amq-protocol (~> 2.3, >= 2.3.0)
     bunny-mock (1.7.0)
       bunny (>= 1.7)
     byebug (10.0.2)
@@ -131,9 +131,10 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    sneakers (2.7.0)
-      bunny (~> 2.9.2)
+    sneakers (2.11.0)
+      bunny (~> 2.12)
       concurrent-ruby (~> 1.0)
+      rake
       serverengine (~> 2.0.5)
       thor
     thor (0.20.3)
