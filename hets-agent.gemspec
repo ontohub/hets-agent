@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bunny-mock', '~> 1.7.0'
   spec.add_development_dependency 'fuubar', '~> 2.3.0'
   spec.add_development_dependency 'rake', '~> 12.3.0'
-  spec.add_development_dependency 'rspec', '~> 3.8.0'
+  spec.add_development_dependency 'rspec', '~> 3.9.0'
 
   spec.add_development_dependency 'codecov', '~> 0.1.10'
   spec.add_development_dependency 'rubocop', '~> 0.65.0'
