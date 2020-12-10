@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 12.3.0'
   spec.add_development_dependency 'rspec', '~> 3.8.0'
 
-  spec.add_development_dependency 'codecov', '~> 0.1.10'
+  spec.add_development_dependency 'codecov', '~> 0.2.13'
   spec.add_development_dependency 'rubocop', '~> 0.65.0'
 
   # We want to have these in the production environment as well in case we need
